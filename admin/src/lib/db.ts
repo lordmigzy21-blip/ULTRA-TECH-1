@@ -404,3 +404,33 @@ export const saveSettings = async (settings: Settings): Promise<Settings> => {
   setLocalStorageItem('ut_settings', JSON.stringify(settings));
   return settings;
 };
+
+export function getProductMainImage(imageUrl: string): string {
+  if (!imageUrl) return '';
+  if (imageUrl.startsWith('[')) {
+    try {
+      const arr = JSON.parse(imageUrl);
+      if (Array.isArray(arr) && arr.length > 0) {
+        return arr[0];
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+  return imageUrl;
+}
+
+export function getProductAllImages(imageUrl: string): string[] {
+  if (!imageUrl) return [];
+  if (imageUrl.startsWith('[')) {
+    try {
+      const arr = JSON.parse(imageUrl);
+      if (Array.isArray(arr)) {
+        return arr.filter(Boolean);
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+  return [imageUrl].filter(Boolean);
+}

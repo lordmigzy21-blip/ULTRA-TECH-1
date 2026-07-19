@@ -1,15 +1,14 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
 import AppImage from './ui/AppImage';
 import Icon from './ui/AppIcon';
-import { Product, getSettings } from '@/lib/db';
+import { Product, getSettings, getProductMainImage } from '@/lib/db';
 
 interface ProductCardProps {
   product: Product;
+  onOpenDetails?: (product: Product) => void;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, onOpenDetails }: ProductCardProps) {
   const [phone, setPhone] = useState('237676886733');
 
   useEffect(() => {
@@ -26,13 +25,17 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   const isOutOfStock = product.stock_quantity === 0;
+  const mainImage = getProductMainImage(product.image_url);
 
   return (
     <div className="bg-white rounded-3xl border border-border overflow-hidden hover:shadow-xl hover:-translate-y-1.5 transition-[transform,box-shadow] duration-300 flex flex-col group h-full">
-      {/* Container d'image */}
-      <div className="relative w-full aspect-square bg-muted/50 p-6 flex items-center justify-center overflow-hidden">
+      {/* Container d'image clickable */}
+      <div 
+        onClick={() => onOpenDetails?.(product)}
+        className="relative w-full aspect-square bg-muted/50 p-6 flex items-center justify-center overflow-hidden cursor-pointer"
+      >
         <AppImage
-          src={product.image_url}
+          src={mainImage}
           alt={product.name}
           width={280}
           height={280}
@@ -56,7 +59,10 @@ export default function ProductCard({ product }: ProductCardProps) {
         <span className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1.5 block">
           {product.category}
         </span>
-        <h3 className="font-extrabold text-base text-accent line-clamp-2 leading-snug flex-1 group-hover:text-primary transition-colors duration-200 text-pretty">
+        <h3 
+          onClick={() => onOpenDetails?.(product)}
+          className="font-extrabold text-base text-accent line-clamp-2 leading-snug flex-1 group-hover:text-primary transition-colors duration-200 text-pretty cursor-pointer"
+        >
           {product.name}
         </h3>
         
@@ -73,22 +79,33 @@ export default function ProductCard({ product }: ProductCardProps) {
             </span>
           </div>
 
-          <a
-            href={isOutOfStock ? '#' : getWhatsAppLink()}
-            target={isOutOfStock ? '_self' : '_blank'}
-            rel={isOutOfStock ? '' : 'noopener noreferrer'}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs uppercase tracking-wide transition-[transform,background-color] duration-200 ${
-              isOutOfStock
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-green-500 text-white hover:bg-green-600 hover:scale-105 active:scale-95'
-            }`}
-            onClick={(e) => {
-              if (isOutOfStock) e.preventDefault();
-            }}
-          >
-            <Icon name="PhoneIcon" size={14} className="fill-current" aria-hidden="true" />
-            Commander
-          </a>
+          <div className="flex gap-2">
+            {onOpenDetails && (
+              <button
+                onClick={() => onOpenDetails(product)}
+                className="flex items-center justify-center p-2.5 rounded-2xl bg-muted border border-border text-accent hover:bg-border transition-colors"
+                title="Voir les détails et caractéristiques"
+              >
+                <Icon name="SearchIcon" size={14} aria-hidden="true" />
+              </button>
+            )}
+            <a
+              href={isOutOfStock ? '#' : getWhatsAppLink()}
+              target={isOutOfStock ? '_self' : '_blank'}
+              rel={isOutOfStock ? '' : 'noopener noreferrer'}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs uppercase tracking-wide transition-[transform,background-color] duration-200 ${
+                isOutOfStock
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-green-500 text-white hover:bg-green-600 hover:scale-105 active:scale-95'
+              }`}
+              onClick={(e) => {
+                if (isOutOfStock) e.preventDefault();
+              }}
+            >
+              <Icon name="PhoneIcon" size={14} className="fill-current" aria-hidden="true" />
+              Commander
+            </a>
+          </div>
         </div>
       </div>
     </div>

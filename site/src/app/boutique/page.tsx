@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import ProductCard from '@/components/ProductCard';
+import ProductDetailsModal from '@/components/ProductDetailsModal';
 import { Product, getProducts } from '@/lib/db';
 import Icon from '@/components/ui/AppIcon';
 
@@ -16,6 +17,7 @@ export default function Boutique() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Tous');
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     getProducts().then((data) => {
@@ -130,7 +132,7 @@ export default function Boutique() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {filteredProducts.map((product) => (
               <div key={product.id}>
-                <ProductCard product={product} />
+                <ProductCard product={product} onOpenDetails={setSelectedProduct} />
               </div>
             ))}
           </div>
@@ -140,6 +142,9 @@ export default function Boutique() {
 
       <Footer />
       <WhatsAppButton />
+
+      {/* Details Modal */}
+      <ProductDetailsModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
     </main>
   );
 }

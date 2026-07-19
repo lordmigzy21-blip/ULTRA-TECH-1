@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Icon from '@/components/ui/AppIcon';
 import AppImage from '@/components/ui/AppImage';
-import { Product as AdminProduct, getProducts, saveProduct, deleteProduct, uploadProductImage } from '@/lib/db';
+import { Product as AdminProduct, getProducts, saveProduct, deleteProduct, uploadProductImage, getProductMainImage, getProductAllImages } from '@/lib/db';
 
 const categories = ['Ordinateurs', 'Téléphones', 'Périphériques', 'Accessoires'];
 
@@ -29,6 +29,8 @@ export default function AdminProducts() {
     const [toast, setToast] = useState<Toast>(null);
     const [uploadState, setUploadState] = useState<UploadState>('idle');
     const [uploadError, setUploadError] = useState('');
+    const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+    const [manualUrl, setManualUrl] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -46,20 +48,24 @@ export default function AdminProducts() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            const finalImageUrl = JSON.stringify(uploadedImages);
+            const productData = { ...form, image_url: finalImageUrl };
             if (editingId) {
-                const updated = await saveProduct({ ...form, id: editingId });
+                const updated = await saveProduct({ ...productData, id: editingId });
                 setProducts((prev) =>
                     prev.map((p) => (p.id === editingId ? updated : p))
                 );
                 showToast('success', 'Produit modifié avec succès ✓');
             } else {
-                const added = await saveProduct(form);
+                const added = await saveProduct(productData);
                 setProducts((prev) => [added, ...prev]);
                 showToast('success', 'Produit ajouté avec succès ✓');
             }
             setShowForm(false);
             setEditingId(null);
             setForm(emptyForm);
+            setUploadedImages([]);
+            setManualUrl('');
             setUploadState('idle');
             setUploadError('');
         } catch (err) {
@@ -76,8 +82,9 @@ export default function AdminProducts() {
         setUploadError('');
         try {
             const url = await uploadProductImage(file);
-            setForm((f) => ({ ...f, image_url: url }));
+            setUploadedImages((prev) => [...prev, url]);
             setUploadState('done');
+            setTimeout(() => setUploadState('idle'), 2000);
         } catch (err: any) {
             setUploadState('error');
             setUploadError(err?.message || 'Erreur lors du téléchargement.');
@@ -89,6 +96,8 @@ export default function AdminProducts() {
         setForm(rest);
         setEditingId(id);
         setShowForm(true);
+        setUploadedImages(getProductAllImages(product.image_url));
+        setManualUrl('');
         setUploadState('idle');
         setUploadError('');
     };
@@ -237,11 +246,27 @@ export default function AdminProducts() {
                                     className="w-full px-4 py-3 rounded-2xl border border-border bg-muted text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all resize-none"
                                     placeholder="Spécifications, caractéristiques..."
                                 />
-                            </div>
+                                              {/* Multi-Image Upload */}
+                            <div className="space-y-3">
+                                <label className="text-sm font-bold text-foreground">Photos du produit ({uploadedImages.length})</label>
 
-                            {/* Image Upload + URL */}
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-foreground">Image du produit</label>
+                                {/* Images Grid */}
+                                {uploadedImages.length > 0 && (
+                                    <div className="grid grid-cols-4 gap-3 bg-muted p-3 rounded-2xl border border-border">
+                                        {uploadedImages.map((url, idx) => (
+                                            <div key={idx} className="relative aspect-square rounded-xl bg-white border border-border overflow-hidden flex items-center justify-center group p-1">
+                                                <img src={url} alt="" className="object-contain max-w-full max-h-full" />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setUploadedImages((prev) => prev.filter((_, i) => i !== idx))}
+                                                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow"
+                                                >
+                                                    <Icon name="XMarkIcon" size={10} />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
 
                                 {/* Drop zone / click to upload */}
                                 <div
@@ -252,31 +277,17 @@ export default function AdminProducts() {
                                         const file = e.dataTransfer.files[0];
                                         if (file) handleImageFile(file);
                                     }}
-                                    className={`relative flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-2xl cursor-pointer transition-all py-4 ${
+                                    className={`relative flex flex-col items-center justify-center gap-1 border-2 border-dashed rounded-2xl cursor-pointer transition-all py-3 ${
                                         uploadState === 'uploading'
                                             ? 'border-primary bg-sky-50 animate-pulse'
-                                            : uploadState === 'done'
-                                            ? 'border-green-400 bg-green-50'
-                                            : uploadState === 'error'
-                                            ? 'border-red-400 bg-red-50'
                                             : 'border-border bg-muted hover:border-primary hover:bg-sky-50'
                                     }`}
                                 >
-                                    {form.image_url ? (
-                                        <img
-                                            src={form.image_url}
-                                            alt="Aperçu"
-                                            className="h-20 w-auto object-contain rounded-xl"
-                                        />
-                                    ) : (
-                                        <Icon name="PhotoIcon" size={32} className="opacity-30" />
-                                    )}
-                                    <p className="text-xs font-bold text-muted-foreground">
+                                    <Icon name="UploadIcon" size={24} className="opacity-40" />
+                                    <p className="text-[11px] font-bold text-muted-foreground">
                                         {uploadState === 'uploading'
-                                            ? 'Téléchargement en cours…'
-                                            : uploadState === 'done'
-                                            ? '✓ Image téléchargée'
-                                            : 'Cliquez ou glissez une image ici'}
+                                            ? 'Téléchargement...'
+                                            : 'Ajouter une photo locale'}
                                     </p>
                                     <input
                                         ref={fileInputRef}
@@ -294,15 +305,29 @@ export default function AdminProducts() {
                                     <p className="text-xs text-red-500 font-bold">{uploadError}</p>
                                 )}
 
-                                {/* Manual URL fallback */}
-                                <input
-                                    type="text"
-                                    value={form.image_url}
-                                    onChange={(e) => setForm({ ...form, image_url: e.target.value })}
-                                    className="w-full px-4 py-3 rounded-2xl border border-border bg-muted text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all"
-                                    placeholder="Ou collez une URL directement"
-                                />
-                            </div>
+                                {/* Manual URL input to append to list */}
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={manualUrl}
+                                        onChange={(e) => setManualUrl(e.target.value)}
+                                        className="flex-1 px-4 py-2.5 rounded-2xl border border-border bg-muted text-xs focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+                                        placeholder="Ou collez une URL à ajouter..."
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            if (manualUrl.trim()) {
+                                                setUploadedImages((prev) => [...prev, manualUrl.trim()]);
+                                                setManualUrl('');
+                                            }
+                                        }}
+                                        className="px-4 py-2.5 bg-primary text-primary-foreground rounded-2xl font-bold text-xs uppercase hover:bg-dark-blue-2 transition-all"
+                                    >
+                                        Ajouter
+                                    </button>
+                                </div>
+                            </div>                        </div>
 
                             {/* Featured toggle */}
                             <label className="flex items-center gap-3 cursor-pointer">
@@ -350,7 +375,7 @@ export default function AdminProducts() {
                         {/* Image */}
                         <div className="w-16 h-16 rounded-2xl bg-muted flex-shrink-0 overflow-hidden">
                             <AppImage
-                                src={product.image_url}
+                                src={getProductMainImage(product.image_url)}
                                 alt={product.name}
                                 width={64}
                                 height={64}

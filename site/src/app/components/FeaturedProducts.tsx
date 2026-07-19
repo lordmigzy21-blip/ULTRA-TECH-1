@@ -3,12 +3,14 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
+import ProductDetailsModal from '@/components/ProductDetailsModal';
 import { Product, getProducts } from '@/lib/db';
 import Icon from '@/components/ui/AppIcon';
 
 export default function FeaturedProducts() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     getProducts().then((allProducts) => {
@@ -55,11 +57,14 @@ export default function FeaturedProducts() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           {products.map((product) => (
             <div key={product.id}>
-              <ProductCard product={product} />
+              <ProductCard product={product} onOpenDetails={setSelectedProduct} />
             </div>
           ))}
         </div>
       </div>
+
+      {/* Details Modal */}
+      <ProductDetailsModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
     </section>
   );
 }
