@@ -1,35 +1,24 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
 import ProductDetailsModal from '@/components/ProductDetailsModal';
-import { Product, getProducts } from '@/lib/db';
+import { Product } from '@/lib/db';
 import Icon from '@/components/ui/AppIcon';
 
-export default function FeaturedProducts() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+interface FeaturedProductsProps {
+  initialProducts: Product[];
+}
+
+export default function FeaturedProducts({ initialProducts }: FeaturedProductsProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  useEffect(() => {
-    getProducts().then((allProducts) => {
-      const featured = allProducts.filter((p) => p.featured && p.stock_quantity > 0).slice(0, 4);
-      setProducts(featured);
-      setLoading(false);
-    });
-  }, []);
+  const featured = initialProducts
+    .filter((p) => p.featured && p.stock_quantity > 0)
+    .slice(0, 4);
 
-  if (loading) {
-    return (
-      <div className="py-24 text-center text-muted-foreground">
-        <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-3" />
-        <p className="font-bold text-sm">Chargement des produits…</p>
-      </div>
-    );
-  }
-
-  if (products.length === 0) {
+  if (featured.length === 0) {
     return null; // Don't render section if there are no featured products
   }
 
@@ -55,7 +44,7 @@ export default function FeaturedProducts() {
 
         {/* Grille de produits */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-          {products.map((product) => (
+          {featured.map((product) => (
             <div key={product.id}>
               <ProductCard product={product} onOpenDetails={setSelectedProduct} />
             </div>

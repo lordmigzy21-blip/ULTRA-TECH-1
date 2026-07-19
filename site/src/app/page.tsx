@@ -7,8 +7,13 @@ import WhyChooseUs from './components/WhyChooseUs';
 import LocationsTeaser from './components/LocationsTeaser';
 import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import { getProducts } from '@/lib/db';
 
-export default function Home() {
+export const revalidate = 60; // Refresh cache every 60s
+
+export default async function Home() {
+  const products = await getProducts();
+
   return (
     <main className="relative min-h-screen bg-white">
       <Header />
@@ -16,7 +21,7 @@ export default function Home() {
       
       <ServicesStrip />
       
-      <FeaturedProducts />
+      <FeaturedProducts initialProducts={products} />
       
       <WhyChooseUs />
       
