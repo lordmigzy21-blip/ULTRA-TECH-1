@@ -28,9 +28,9 @@ export default function ProductCard({ product }: ProductCardProps) {
   const isOutOfStock = product.stock_quantity === 0;
 
   return (
-    <div className="bg-white rounded-3xl border border-border overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group h-full">
+    <div className="bg-white rounded-3xl border border-border overflow-hidden hover:shadow-xl hover:-translate-y-1.5 transition-[transform,box-shadow] duration-300 flex flex-col group h-full">
       {/* Container d'image */}
-      <div className="relative w-full aspect-square bg-muted p-6 flex items-center justify-center overflow-hidden">
+      <div className="relative w-full aspect-square bg-muted/50 p-6 flex items-center justify-center overflow-hidden">
         <AppImage
           src={product.image_url}
           alt={product.name}
@@ -41,11 +41,11 @@ export default function ProductCard({ product }: ProductCardProps) {
         
         {/* Badge de stock */}
         {isOutOfStock ? (
-          <span className="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
+          <span className="absolute top-4 right-4 bg-red-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm animate-pulse">
             Rupture
           </span>
         ) : product.featured ? (
-          <span className="absolute top-4 right-4 bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
+          <span className="absolute top-4 right-4 bg-primary text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
             Vedette
           </span>
         ) : null}
@@ -53,23 +53,23 @@ export default function ProductCard({ product }: ProductCardProps) {
 
       {/* Détails du produit */}
       <div className="p-6 flex flex-col flex-1">
-        <span className="text-xs font-bold text-primary uppercase tracking-widest mb-1.5 block">
+        <span className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1.5 block">
           {product.category}
         </span>
-        <h3 className="font-extrabold text-base text-accent line-clamp-2 leading-snug flex-1 group-hover:text-primary transition-colors">
+        <h3 className="font-extrabold text-base text-accent line-clamp-2 leading-snug flex-1 group-hover:text-primary transition-colors duration-200 text-pretty">
           {product.name}
         </h3>
         
-        <p className="text-xs text-gray-500 line-clamp-2 mt-2 leading-relaxed h-8">
+        <p className="text-xs text-gray-500 line-clamp-2 mt-2 leading-relaxed h-8 text-pretty">
           {product.description}
         </p>
 
         {/* Prix et Action */}
-        <div className="mt-5 pt-4 border-t border-border flex items-center justify-between gap-2">
+        <div className="mt-5 pt-4 border-t border-border flex items-center justify-between gap-3">
           <div className="flex flex-col">
-            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Prix</span>
-            <span className="font-extrabold text-base text-accent leading-none mt-1">
-              {product.price.toLocaleString('fr-CM')} <span className="text-xs font-bold">FCFA</span>
+            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Prix</span>
+            <span className="font-extrabold text-base text-accent leading-none mt-1 whitespace-nowrap">
+              {product.price.toLocaleString('fr-CM')}&nbsp;<span className="text-xs font-bold">FCFA</span>
             </span>
           </div>
 
@@ -77,7 +77,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             href={isOutOfStock ? '#' : getWhatsAppLink()}
             target={isOutOfStock ? '_self' : '_blank'}
             rel={isOutOfStock ? '' : 'noopener noreferrer'}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs uppercase tracking-wide transition-all ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs uppercase tracking-wide transition-[transform,background-color] duration-200 ${
               isOutOfStock
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                 : 'bg-green-500 text-white hover:bg-green-600 hover:scale-105 active:scale-95'
@@ -86,7 +86,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               if (isOutOfStock) e.preventDefault();
             }}
           >
-            <Icon name="PhoneIcon" size={14} className="fill-current" />
+            <Icon name="PhoneIcon" size={14} className="fill-current" aria-hidden="true" />
             Commander
           </a>
         </div>

@@ -20,9 +20,9 @@ export default function FeaturedProducts() {
 
   if (loading) {
     return (
-      <div className="py-20 text-center text-muted-foreground">
+      <div className="py-24 text-center text-muted-foreground">
         <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-3" />
-        <p className="font-bold text-sm">Chargement des produits...</p>
+        <p className="font-bold text-sm">Chargement des produits…</p>
       </div>
     );
   }
@@ -32,27 +32,27 @@ export default function FeaturedProducts() {
   }
 
   return (
-    <section className="py-20 bg-muted/30">
+    <section className="py-24 bg-muted/20">
       <div className="max-w-7xl mx-auto px-6 space-y-12">
         {/* Titre de section */}
         <div className="flex items-end justify-between gap-6 flex-wrap">
           <div className="space-y-2">
             <span className="text-primary text-xs font-bold uppercase tracking-widest block">Notre catalogue</span>
-            <h2 className="font-extrabold text-3xl md:text-4xl text-accent tracking-tight">
+            <h2 className="font-extrabold text-3xl md:text-4xl text-accent tracking-tight text-balance">
               Produits en Vedette
             </h2>
           </div>
           <Link
             href="/boutique"
-            className="flex items-center gap-2 text-primary font-bold text-sm hover:underline group"
+            className="flex items-center gap-2 text-primary font-bold text-sm hover:underline group transition-colors duration-200"
           >
             Voir toute la boutique
-            <Icon name="ChevronRightIcon" size={16} className="group-hover:translate-x-1 transition-transform" />
+            <Icon name="ChevronRightIcon" size={16} className="group-hover:translate-x-1 transition-transform duration-200" aria-hidden="true" />
           </Link>
         </div>
 
         {/* Grille de produits */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           {products.map((product) => (
             <div key={product.id}>
               <ProductCard product={product} />

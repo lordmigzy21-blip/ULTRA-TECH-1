@@ -9,10 +9,10 @@ export default function LocationsTeaser() {
         {/* En-tête */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <span className="text-primary text-xs font-bold uppercase tracking-widest block">Où nous trouver</span>
-          <h2 className="font-extrabold text-3xl md:text-4xl text-accent tracking-tight">
+          <h2 className="font-extrabold text-3xl md:text-4xl text-accent tracking-tight text-balance">
             Nos Boutiques à Douala
           </h2>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-sm text-muted-foreground leading-relaxed text-pretty">
             Nous vous accueillons dans deux points stratégiques de Douala pour la vente de matériel informatique, le retrait de vos commandes et vos réparations.
           </p>
         </div>
@@ -21,24 +21,24 @@ export default function LocationsTeaser() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           
           {/* Akwa */}
-          <div className="bg-white rounded-3xl border border-border p-8 hover:shadow-lg transition-all duration-300 space-y-6 flex flex-col justify-between">
+          <div className="bg-white rounded-3xl border border-border p-8 hover:shadow-xl hover:border-primary/20 transition-[transform,box-shadow,border-color] duration-300 space-y-6 flex flex-col justify-between">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-sky-light text-primary flex items-center justify-center">
-                  <Icon name="MapPinIcon" size={20} />
+                  <Icon name="MapPinIcon" size={20} aria-hidden="true" />
                 </div>
                 <h3 className="font-extrabold text-xl text-accent">Ultra Tech Akwa</h3>
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed text-pretty">
                 Boutique N30, Galeries du Congo, Akwa, Douala. Idéalement situé au cœur du quartier des affaires pour un accès rapide.
               </p>
               <div className="space-y-2 text-xs text-accent font-semibold pt-2">
                 <p className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-primary" />
+                  <span className="w-2 h-2 rounded-full bg-primary" aria-hidden="true" />
                   Lundi - Samedi : 8h00 - 18h30
                 </p>
                 <p className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-primary" />
+                  <span className="w-2 h-2 rounded-full bg-primary" aria-hidden="true" />
                   Prestations : Vente & Dépannage
                 </p>
               </div>
@@ -47,31 +47,31 @@ export default function LocationsTeaser() {
               href="https://wa.me/237676886733?text=Bonjour%20Ultra%20Tech%20Akwa!%20Je%20souhaite%20obtenir%20des%20informations%20ou%20venir%20en%20boutique."
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 w-full text-center py-3.5 bg-accent text-white font-bold text-xs uppercase tracking-wider rounded-2xl hover:bg-dark-blue-2 transition-colors block"
+              className="mt-6 w-full text-center py-3.5 bg-accent text-white font-bold text-xs uppercase tracking-wider rounded-2xl hover:bg-dark-blue-2 hover:scale-[1.02] active:scale-98 transition-[transform,background-color] duration-200 block shadow-md"
             >
               Contacter Boutique Akwa
             </a>
           </div>
 
           {/* Nkouabang */}
-          <div className="bg-white rounded-3xl border border-border p-8 hover:shadow-lg transition-all duration-300 space-y-6 flex flex-col justify-between">
+          <div className="bg-white rounded-3xl border border-border p-8 hover:shadow-xl hover:border-primary/20 transition-[transform,box-shadow,border-color] duration-300 space-y-6 flex flex-col justify-between">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-sky-light text-primary flex items-center justify-center">
-                  <Icon name="MapPinIcon" size={20} />
+                  <Icon name="MapPinIcon" size={20} aria-hidden="true" />
                 </div>
                 <h3 className="font-extrabold text-xl text-accent">Ultra Tech Nkouabang</h3>
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed text-pretty">
                 Carrefour Nkouabang, Douala. Pour mieux servir notre clientèle résidant à l&apos;Est de la ville et les environs.
               </p>
               <div className="space-y-2 text-xs text-accent font-semibold pt-2">
                 <p className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-primary" />
+                  <span className="w-2 h-2 rounded-full bg-primary" aria-hidden="true" />
                   Lundi - Samedi : 8h30 - 19h00
                 </p>
                 <p className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-primary" />
+                  <span className="w-2 h-2 rounded-full bg-primary" aria-hidden="true" />
                   Prestations : Vente, Dépannage & Réseau
                 </p>
               </div>
@@ -80,7 +80,7 @@ export default function LocationsTeaser() {
               href="https://wa.me/237657941527?text=Bonjour%20Ultra%20Tech%20Nkouabang!%20Je%20souhaite%20obtenir%20des%20informations%20ou%20venir%20en%20boutique."
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 w-full text-center py-3.5 bg-primary text-white font-bold text-xs uppercase tracking-wider rounded-2xl hover:bg-sky-600 transition-colors block"
+              className="mt-6 w-full text-center py-3.5 bg-primary text-white font-bold text-xs uppercase tracking-wider rounded-2xl hover:bg-sky-600 hover:scale-[1.02] active:scale-98 transition-[transform,background-color] duration-200 block shadow-md"
             >
               Contacter Boutique Nkouabang
             </a>
