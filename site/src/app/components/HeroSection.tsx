@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import AppImage from '@/components/ui/AppImage';
 
-interface FloatingItem {
+interface FloatingItemType {
   id: string;
   name: string;
   image_url: string;
@@ -19,7 +19,7 @@ interface FloatingItem {
 }
 
 // Configuration extensible des équipements flottants du Hero
-const FLOATING_ITEMS: FloatingItem[] = [
+const FLOATING_ITEMS: FloatingItemType[] = [
   {
     id: 'laptop',
     name: 'Ordinateur portable',
@@ -68,7 +68,7 @@ const FLOATING_ITEMS: FloatingItem[] = [
     moveY: 120,
     rotateSpeed: -35,
   },
-  // Nous activons également les images supplémentaires déjà disponibles dans public/images
+  // Images supplémentaires déjà disponibles dans public/images
   {
     id: 'headphones',
     name: 'Casque Audio',
@@ -105,8 +105,49 @@ const FLOATING_ITEMS: FloatingItem[] = [
     moveY: -150,
     rotateSpeed: -60,
   },
-  // AJOUTER DE FUTURS APPAREILS ICI EN RESPECTANT CE FORMAT
 ];
+
+interface FloatingItemProps {
+  item: FloatingItemType;
+  scrollYProgress: any;
+}
+
+function FloatingItem({ item, scrollYProgress }: FloatingItemProps) {
+  const x = useTransform(scrollYProgress, [0, 1], [0, item.moveX]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, item.moveY]);
+  const rotate = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [item.rotate, item.rotate + item.rotateSpeed]
+  );
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
+  return (
+    <motion.div
+      style={{
+        left: item.left,
+        top: item.top,
+        x,
+        y,
+        rotate,
+        opacity,
+        scale: item.scale,
+      }}
+      className="absolute w-28 h-28 md:w-40 md:h-40 flex items-center justify-center select-none"
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: item.scale }}
+      transition={{ duration: 1, type: 'spring', stiffness: 50 }}
+    >
+      <AppImage
+        src={item.image_url}
+        alt={item.name}
+        width={200}
+        height={200}
+        className="object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.15)] filter saturate-[1.05]"
+      />
+    </motion.div>
+  );
+}
 
 export default function HeroSection() {
   const { scrollYProgress } = useScroll();
@@ -170,7 +211,7 @@ export default function HeroSection() {
           Vente d&apos;ordinateurs, téléphones, sécurité réseau, vidéosurveillance et développement de solutions logicielles sur mesure.
         </motion.p>
 
-        {/* Boutons d&apos;action */}
+        {/* Boutons d'action */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
@@ -196,48 +237,13 @@ export default function HeroSection() {
       {/* ÉQUIPEMENTS FLOTTANTS (Bug 2 résolu : Aucun CTA, purement visuel) */}
       <div className="absolute inset-0 pointer-events-none z-10">
         {mounted &&
-          FLOATING_ITEMS.map((item) => {
-            // Animer les positions en fonction du scroll
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const x = useTransform(scrollYProgress, [0, 1], [0, item.moveX]);
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const y = useTransform(scrollYProgress, [0, 1], [0, item.moveY]);
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const rotate = useTransform(
-              scrollYProgress,
-              [0, 1],
-              [item.rotate, item.rotate + item.rotateSpeed]
-            );
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-
-            return (
-              <motion.div
-                key={item.id}
-                style={{
-                  left: item.left,
-                  top: item.top,
-                  x,
-                  y,
-                  rotate,
-                  opacity,
-                  scale: item.scale,
-                }}
-                className="absolute w-28 h-28 md:w-40 md:h-40 flex items-center justify-center select-none"
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: item.scale }}
-                transition={{ duration: 1, type: 'spring', stiffness: 50 }}
-              >
-                <AppImage
-                  src={item.image_url}
-                  alt={item.name}
-                  width={200}
-                  height={200}
-                  className="object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.15)] filter saturate-[1.05]"
-                />
-              </motion.div>
-            );
-          })}
+          FLOATING_ITEMS.map((item) => (
+            <FloatingItem
+              key={item.id}
+              item={item}
+              scrollYProgress={scrollYProgress}
+            />
+          ))}
       </div>
 
     </section>
