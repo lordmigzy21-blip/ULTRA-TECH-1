@@ -321,33 +321,75 @@ export const getSettings = async (): Promise<Settings> => {
 };
 
 /**
+ * Helper to compress image file using canvas and convert to base64 Data URL.
+ * Resizes image to maximum 800px on either side and compresses as JPEG with 0.7 quality.
+ */
+const compressAndToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new globalThis.Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 800;
+        const MAX_HEIGHT = 800;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(img, 0, 0, width, height);
+        
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        resolve(dataUrl);
+      };
+      img.onerror = (err) => reject(new Error('Erreur de chargement de l\'image'));
+    };
+    reader.onerror = (err) => reject(new Error('Erreur de lecture du fichier'));
+  });
+};
+
+/**
  * Upload a product image to Supabase Storage.
- * If Supabase is not configured, returns a local object URL (temporary, browser-only).
- * Returns the public URL of the uploaded image.
+ * If Supabase upload fails (e.g. bucket doesn't exist) or is not configured,
+ * it silently falls back to a client-side compressed base64 Data URL.
  */
 export const uploadProductImage = async (file: File): Promise<string> => {
-  if (isSupabaseConfigured && supabase) {
-    const ext = file.name.split('.').pop() || 'jpg';
-    const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${ext}`;
-    const { data, error } = await supabase.storage
-      .from('product-images')
-      .upload(filename, file, { contentType: file.type, upsert: false });
-    if (!error && data) {
-      const { data: urlData } = supabase.storage
+  try {
+    if (isSupabaseConfigured && supabase) {
+      const ext = file.name.split('.').pop() || 'jpg';
+      const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${ext}`;
+      const { data, error } = await supabase.storage
         .from('product-images')
-        .getPublicUrl(data.path);
-      return urlData.publicUrl;
+        .upload(filename, file, { contentType: file.type, upsert: false });
+      if (!error && data) {
+        const { data: urlData } = supabase.storage
+          .from('product-images')
+          .getPublicUrl(data.path);
+        return urlData.publicUrl;
+      }
+      console.warn('Supabase Storage upload failed, falling back to base64:', error?.message);
     }
-    // If bucket doesn't exist or upload fails, fall back gracefully
-    console.warn('Supabase image upload failed (bucket may not exist):', error?.message);
-    throw new Error(
-      error?.message?.includes('Bucket not found')
-        ? 'Le bucket "product-images" n\'existe pas encore dans Supabase Storage. Collez une URL d\'image directement.'
-        : (error?.message || 'Échec du téléchargement')
-    );
+  } catch (e) {
+    console.warn('Supabase Storage upload exception, falling back to base64:', e);
   }
-  // Fallback: return a temporary object URL (not persisted across sessions)
-  return URL.createObjectURL(file);
+
+  // Fallback to base64 compression
+  return compressAndToBase64(file);
 };
 
 export const saveSettings = async (settings: Settings): Promise<Settings> => {

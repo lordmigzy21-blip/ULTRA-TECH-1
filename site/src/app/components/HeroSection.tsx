@@ -112,9 +112,8 @@ interface FloatingItemProps {
 }
 
 function FloatingItem({ item, index, scrollYProgress }: FloatingItemProps) {
-  const [phase, setPhase] = useState<'entrance' | 'idle'>('entrance');
-  // Guard: never let onAnimationComplete flip to idle more than once
-  const didLand = useRef(false);
+  const [isLanded, setIsLanded] = useState(false);
+  const landedRef = useRef(false);
 
   // Scroll parallax MotionValues
   const parallaxX = useTransform(scrollYProgress, [0, 1], [0, item.moveX]);
@@ -130,84 +129,61 @@ function FloatingItem({ item, index, scrollYProgress }: FloatingItemProps) {
   const floatDuration = 2.8 + (index % 4) * 0.5;
 
   return (
-    <div
-      style={{ position: 'absolute', left: item.left, top: item.top }}
+    <motion.div
+      // Outer layer: parallax scroll (no animate, just style MotionValues)
+      style={{
+        position: 'absolute',
+        left: item.left,
+        top: item.top,
+        x: parallaxX,
+        y: parallaxY,
+        rotate: parallaxRotate,
+        opacity: parallaxOpacity,
+      }}
       className="w-24 h-24 md:w-36 md:h-36 select-none"
     >
-      {/* ── PHASE 1: ENTRANCE — falls from -450px, bounces on land ── */}
-      {phase === 'entrance' && (
-        <motion.div
-          style={{ width: '100%', height: '100%' }}
-          initial={{ y: -450, opacity: 0, scale: 0.3, rotate: item.rotate }}
-          animate={{ y: 0, opacity: 1, scale: item.scale, rotate: 0 }}
-          transition={{
-            type: 'spring',
-            stiffness: 80,
-            damping: 12,
-            delay: index * 0.13,
-          }}
-          onAnimationComplete={() => {
-            if (!didLand.current) {
-              didLand.current = true;
-              setPhase('idle');
-            }
-          }}
-          className="flex items-center justify-center"
-        >
-          <AppImage
-            src={item.image_url}
-            alt={item.name}
-            width={180}
-            height={180}
-            className="object-contain drop-shadow-[0_16px_32px_rgba(0,0,0,0.22)]"
-          />
-        </motion.div>
-      )}
-
-      {/*
-       * ── PHASE 2: IDLE ──
-       * Two separate layers to avoid MotionValue conflicts:
-       *   Outer = scroll parallax (MotionValues in style, no animate prop)
-       *   Inner = idle float (animate prop only, no MotionValues in style)
-       */}
-      {phase === 'idle' && (
-        <motion.div
-          // Outer: scroll-driven parallax + fade out on scroll
-          style={{
-            x: parallaxX,
-            y: parallaxY,
-            rotate: parallaxRotate,
-            opacity: parallaxOpacity,
-            scale: item.scale,
-            width: '100%',
-            height: '100%',
-          }}
-        >
-          <motion.div
-            // Inner: gentle up-down float — no MotionValues here, pure animate
-            style={{ width: '100%', height: '100%' }}
-            animate={{ y: [0, -12, 0] }}
-            transition={{
-              y: {
-                duration: floatDuration,
-                repeat: Infinity,
-                repeatType: 'loop',
-                ease: 'easeInOut',
-              },
-            }}
-            className="flex items-center justify-center"
-          >
-            <AppImage
-              src={item.image_url}
-              alt={item.name}
-              width={180}
-              height={180}
-              className="object-contain drop-shadow-[0_16px_32px_rgba(0,0,0,0.22)]"
-            />
-          </motion.div>
-        </motion.div>
-      )}
-    </div>
+      <motion.div
+        // Inner layer: initial fall spring animation OR idle float loop
+        initial={{ y: -450, opacity: 0, scale: 0.3 }}
+        animate={
+          isLanded
+            ? { y: [0, -12, 0], opacity: 1, scale: item.scale }
+            : { y: 0, opacity: 1, scale: item.scale }
+        }
+        transition={
+          isLanded
+            ? {
+                y: {
+                  duration: floatDuration,
+                  repeat: Infinity,
+                  repeatType: 'reverse',
+                  ease: 'easeInOut',
+                },
+              }
+            : {
+                type: 'spring',
+                stiffness: 80,
+                damping: 12,
+                delay: index * 0.13,
+              }
+        }
+        onAnimationComplete={() => {
+          if (!landedRef.current) {
+            landedRef.current = true;
+            setIsLanded(true);
+          }
+        }}
+        className="w-full h-full flex items-center justify-center"
+      >
+        <AppImage
+          src={item.image_url}
+          alt={item.name}
+          width={180}
+          height={180}
+          className="object-contain drop-shadow-[0_16px_32px_rgba(0,0,0,0.22)]"
+        />
+      </motion.div>
+    </motion.div>
   );
 }
 
