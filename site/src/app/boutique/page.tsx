@@ -1,0 +1,143 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import WhatsAppButton from '@/components/WhatsAppButton';
+import ProductCard from '@/components/ProductCard';
+import { Product, getProducts } from '@/lib/db';
+import Icon from '@/components/ui/AppIcon';
+
+const CATEGORIES = ['Tous', 'Ordinateurs', 'Périphériques', 'Accessoires'];
+
+export default function Boutique() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Tous');
+
+  useEffect(() => {
+    getProducts().then((data) => {
+      setProducts(data);
+      setFilteredProducts(data);
+      setLoading(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    let result = products;
+
+    // Filtre par catégorie
+    if (selectedCategory !== 'Tous') {
+      result = result.filter(
+        (p) => p.category.toLowerCase() === selectedCategory.toLowerCase()
+      );
+    }
+
+    // Filtre par recherche
+    if (search.trim() !== '') {
+      const term = search.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(term) ||
+          (p.description && p.description.toLowerCase().includes(term))
+      );
+    }
+
+    setFilteredProducts(result);
+  }, [search, selectedCategory, products]);
+
+  return (
+    <main className="relative min-h-screen bg-white">
+      <Header />
+      
+      {/* Hero Boutique */}
+      <section className="bg-muted pt-32 pb-16 border-b border-border">
+        <div className="max-w-7xl mx-auto px-6 space-y-4">
+          <span className="text-primary text-xs font-bold uppercase tracking-widest block">Notre catalogue</span>
+          <h1 className="font-extrabold text-3xl md:text-5xl text-accent tracking-tight">
+            Boutique Ultra Tech
+          </h1>
+          <p className="text-sm text-muted-foreground max-w-xl leading-relaxed">
+            Parcourez nos ordinateurs portables professionnels reconditionnés et nos accessoires informatiques de qualité à Douala.
+          </p>
+        </div>
+      </section>
+
+      {/* Catalog & Filters */}
+      <section className="py-16 max-w-7xl mx-auto px-6 space-y-8">
+        
+        {/* Barre de recherche et filtres */}
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+          
+          {/* Catégories */}
+          <div className="flex flex-wrap items-center gap-2">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-5 py-2.5 rounded-2xl text-xs font-bold uppercase tracking-wide transition-all ${
+                  selectedCategory === cat
+                    ? 'bg-primary text-white shadow-sm'
+                    : 'bg-muted border border-border text-accent hover:bg-border'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Recherche */}
+          <div className="relative flex-1 md:max-w-xs">
+            <input
+              type="text"
+              placeholder="Rechercher un produit..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-11 pr-4 py-3 rounded-2xl border border-border bg-muted text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+            />
+            <div className="absolute left-4 top-3.5 text-gray-400">
+              <Icon name="SearchIcon" size={16} />
+            </div>
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                className="absolute right-4 top-3.5 text-gray-400 hover:text-accent"
+              >
+                <Icon name="XMarkIcon" size={16} />
+              </button>
+            )}
+          </div>
+
+        </div>
+
+        {/* Liste des produits */}
+        {loading ? (
+          <div className="py-32 text-center text-muted-foreground">
+            <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full mx-auto mb-3" />
+            <p className="font-bold">Chargement du catalogue...</p>
+          </div>
+        ) : filteredProducts.length === 0 ? (
+          <div className="py-24 text-center text-muted-foreground border border-dashed border-border rounded-3xl">
+            <Icon name="ShoppingBagIcon" size={48} className="mx-auto mb-4 opacity-30" />
+            <p className="font-bold text-accent">Aucun produit trouvé</p>
+            <p className="text-xs text-gray-500 mt-1">Essayer d&apos;ajuster vos critères de recherche ou de catégorie.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {filteredProducts.map((product) => (
+              <div key={product.id}>
+                <ProductCard product={product} />
+              </div>
+            ))}
+          </div>
+        )}
+
+      </section>
+
+      <Footer />
+      <WhatsAppButton />
+    </main>
+  );
+}
