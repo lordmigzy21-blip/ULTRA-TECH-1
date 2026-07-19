@@ -320,6 +320,31 @@ export const getSettings = async (): Promise<Settings> => {
   return local ? { ...DEFAULT_SETTINGS, ...JSON.parse(local) } : DEFAULT_SETTINGS;
 };
 
+/**
+ * Upload a product image to Supabase Storage.
+ * If Supabase is not configured, returns a local object URL (temporary, browser-only).
+ * Returns the public URL of the uploaded image.
+ */
+export const uploadProductImage = async (file: File): Promise<string> => {
+  if (isSupabaseConfigured && supabase) {
+    const ext = file.name.split('.').pop() || 'jpg';
+    const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${ext}`;
+    const { data, error } = await supabase.storage
+      .from('product-images')
+      .upload(filename, file, { contentType: file.type, upsert: false });
+    if (!error && data) {
+      const { data: urlData } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(data.path);
+      return urlData.publicUrl;
+    }
+    console.error('Erreur upload image Supabase:', error);
+    throw new Error(error?.message || 'Upload failed');
+  }
+  // Fallback: return a temporary object URL (not persisted across sessions)
+  return URL.createObjectURL(file);
+};
+
 export const saveSettings = async (settings: Settings): Promise<Settings> => {
   initLocalStorage();
   if (isSupabaseConfigured && supabase) {

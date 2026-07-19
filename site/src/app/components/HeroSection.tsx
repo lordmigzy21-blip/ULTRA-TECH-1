@@ -1,24 +1,23 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import AppImage from '@/components/ui/AppImage';
 
 interface FloatingItemType {
   id: string;
   name: string;
   image_url: string;
-  left: string;      // Position horizontale de départ
-  top: string;       // Position verticale de départ
-  scale: number;     // Échelle de l'image
-  rotate: number;    // Rotation initiale
-  moveX: number;     // Distance de déplacement X sur scroll (px)
-  moveY: number;     // Distance de déplacement Y sur scroll (px)
-  rotateSpeed: number; // Vitesse de rotation sur scroll
+  left: string;
+  top: string;
+  scale: number;
+  rotate: number;
+  moveX: number;
+  moveY: number;
+  rotateSpeed: number;
 }
 
-// Configuration extensible des équipements flottants du Hero
 const FLOATING_ITEMS: FloatingItemType[] = [
   {
     id: 'laptop',
@@ -68,7 +67,6 @@ const FLOATING_ITEMS: FloatingItemType[] = [
     moveY: 120,
     rotateSpeed: -35,
   },
-  // Images supplémentaires déjà disponibles dans public/images
   {
     id: 'headphones',
     name: 'Casque Audio',
@@ -109,43 +107,100 @@ const FLOATING_ITEMS: FloatingItemType[] = [
 
 interface FloatingItemProps {
   item: FloatingItemType;
+  index: number;
   scrollYProgress: any;
 }
 
-function FloatingItem({ item, scrollYProgress }: FloatingItemProps) {
-  const x = useTransform(scrollYProgress, [0, 1], [0, item.moveX]);
-  const y = useTransform(scrollYProgress, [0, 1], [0, item.moveY]);
-  const rotate = useTransform(
+function FloatingItem({ item, index, scrollYProgress }: FloatingItemProps) {
+  const [landed, setLanded] = useState(false);
+  // Guard: only fire setLanded once (prevents re-fires from idle repeat cycles)
+  const landedRef = useRef(false);
+
+  const parallaxX = useTransform(scrollYProgress, [0, 1], [0, item.moveX]);
+  const parallaxY = useTransform(scrollYProgress, [0, 1], [0, item.moveY]);
+  const parallaxRotate = useTransform(
     scrollYProgress,
     [0, 1],
     [item.rotate, item.rotate + item.rotateSpeed]
   );
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const parallaxOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
-    <motion.div
+    <div
       style={{
+        position: 'absolute',
         left: item.left,
         top: item.top,
-        x,
-        y,
-        rotate,
-        opacity,
-        scale: item.scale,
+        width: '7rem',
+        height: '7rem',
       }}
-      className="absolute w-28 h-28 md:w-40 md:h-40 flex items-center justify-center select-none"
-      initial={{ opacity: 0, scale: 0.5 }}
-      animate={{ opacity: 1, scale: item.scale }}
-      transition={{ duration: 1, type: 'spring', stiffness: 50 }}
+      className="md:w-40 md:h-40"
     >
-      <AppImage
-        src={item.image_url}
-        alt={item.name}
-        width={200}
-        height={200}
-        className="object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.15)] filter saturate-[1.05]"
-      />
-    </motion.div>
+      {/* ── ENTRANCE: falls from above, bounces on land ── */}
+      {!landed && (
+        <motion.div
+          style={{ width: '100%', height: '100%' }}
+          initial={{ y: -450, opacity: 0, scale: 0.3 }}
+          animate={{ y: 0, opacity: 1, scale: item.scale }}
+          transition={{
+            type: 'spring',
+            stiffness: 85,
+            damping: 10,
+            delay: index * 0.12,
+          }}
+          onAnimationComplete={() => {
+            if (!landedRef.current) {
+              landedRef.current = true;
+              setLanded(true);
+            }
+          }}
+          className="flex items-center justify-center select-none"
+        >
+          <AppImage
+            src={item.image_url}
+            alt={item.name}
+            width={200}
+            height={200}
+            className="object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.18)] filter saturate-[1.05]"
+          />
+        </motion.div>
+      )}
+
+      {/* ── IDLE FLOAT: only mounts after entrance is done ── */}
+      {landed && (
+        <motion.div
+          style={{
+            x: parallaxX,
+            y: parallaxY,
+            rotate: parallaxRotate,
+            opacity: parallaxOpacity,
+            width: '100%',
+            height: '100%',
+            scale: item.scale,
+          }}
+          animate={{
+            y: [0, -10, 0],
+          }}
+          transition={{
+            y: {
+              duration: 3 + (index % 3) * 0.6,
+              repeat: Infinity,
+              repeatType: 'reverse',
+              ease: 'easeInOut',
+            },
+          }}
+          className="flex items-center justify-center select-none"
+        >
+          <AppImage
+            src={item.image_url}
+            alt={item.name}
+            width={200}
+            height={200}
+            className="object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.18)] filter saturate-[1.05]"
+          />
+        </motion.div>
+      )}
+    </div>
   );
 }
 
@@ -159,15 +214,18 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28 pb-16">
-      
-      {/* BACKGROUND GRADIENT ANIMÉ (Bug 1 résolu) */}
-      <div 
+
+      {/* BACKGROUND GRADIENT ANIMÉ */}
+      <div
         className="absolute inset-0 z-0 bg-[length:400%_400%] animate-[gradient_15s_ease_infinite]"
         style={{
           backgroundImage: 'linear-gradient(135deg, #CAE8E8, #28469E, #CAE8E8, #28469E)',
         }}
       />
-      
+
+      {/* Radial overlay for atmospheric depth */}
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.18)_0%,transparent_65%)] pointer-events-none" />
+
       {/* Styles personnalisés pour le dégradé */}
       <style jsx global>{`
         @keyframes gradient {
@@ -179,7 +237,7 @@ export default function HeroSection() {
 
       {/* Contenu textuel central */}
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center space-y-8 select-none">
-        
+
         {/* Surlignage */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
@@ -195,10 +253,10 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="font-black text-4xl md:text-6xl text-white tracking-tight leading-[1.1] drop-shadow-sm"
+          className="font-black text-4xl md:text-6xl text-white tracking-tight leading-[1.1] drop-shadow-md text-balance"
         >
           Votre Univers Technologique <br className="hidden md:block" />
-          <span className="text-accent bg-white/10 px-2 py-0.5 rounded-2xl">à Douala</span>
+          <span className="text-accent bg-white/10 px-3 py-0.5 rounded-2xl">à Douala</span>
         </motion.h1>
 
         {/* Sous-titre */}
@@ -206,7 +264,7 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="text-base md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed"
+          className="text-base md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed text-pretty"
         >
           Vente d&apos;ordinateurs, téléphones, sécurité réseau, vidéosurveillance et développement de solutions logicielles sur mesure.
         </motion.p>
@@ -220,13 +278,13 @@ export default function HeroSection() {
         >
           <Link
             href="/boutique"
-            className="px-8 py-4 bg-white text-accent font-black text-sm uppercase tracking-wider rounded-2xl shadow-lg hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all"
+            className="px-8 py-4 bg-white text-accent font-black text-sm uppercase tracking-wider rounded-2xl shadow-lg hover:bg-gray-50 hover:scale-105 active:scale-95 transition-[transform,background-color,box-shadow] duration-200"
           >
             Explorer la boutique
           </Link>
           <Link
             href="/rdv"
-            className="px-8 py-4 bg-accent text-white font-black text-sm uppercase tracking-wider rounded-2xl shadow-lg hover:bg-dark-blue-2 hover:scale-105 active:scale-95 transition-all border border-white/10"
+            className="px-8 py-4 bg-accent text-white font-black text-sm uppercase tracking-wider rounded-2xl shadow-lg hover:bg-dark-blue-2 hover:scale-105 active:scale-95 transition-[transform,background-color,box-shadow] duration-200 border border-white/10"
           >
             Prendre rendez-vous
           </Link>
@@ -234,13 +292,14 @@ export default function HeroSection() {
 
       </div>
 
-      {/* ÉQUIPEMENTS FLOTTANTS (Bug 2 résolu : Aucun CTA, purement visuel) */}
+      {/* ÉQUIPEMENTS FLOTTANTS */}
       <div className="absolute inset-0 pointer-events-none z-10">
         {mounted &&
-          FLOATING_ITEMS.map((item) => (
+          FLOATING_ITEMS.map((item, index) => (
             <FloatingItem
               key={item.id}
               item={item}
+              index={index}
               scrollYProgress={scrollYProgress}
             />
           ))}

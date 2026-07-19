@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Icon from '@/components/ui/AppIcon';
 import AppImage from '@/components/ui/AppImage';
-import { Product as AdminProduct, getProducts, saveProduct, deleteProduct } from '@/lib/db';
+import { Product as AdminProduct, getProducts, saveProduct, deleteProduct, uploadProductImage } from '@/lib/db';
 
 const categories = ['Ordinateurs', 'Téléphones', 'Périphériques', 'Accessoires'];
 
@@ -18,6 +18,7 @@ const emptyForm: Omit<AdminProduct, 'id'> = {
 };
 
 type Toast = { type: 'success' | 'error'; message: string } | null;
+type UploadState = 'idle' | 'uploading' | 'done' | 'error';
 
 export default function AdminProducts() {
     const [products, setProducts] = useState<AdminProduct[]>([]);
@@ -26,6 +27,9 @@ export default function AdminProducts() {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [form, setForm] = useState<Omit<AdminProduct, 'id'>>(emptyForm);
     const [toast, setToast] = useState<Toast>(null);
+    const [uploadState, setUploadState] = useState<UploadState>('idle');
+    const [uploadError, setUploadError] = useState('');
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         getProducts().then((data) => {
@@ -56,8 +60,27 @@ export default function AdminProducts() {
             setShowForm(false);
             setEditingId(null);
             setForm(emptyForm);
+            setUploadState('idle');
+            setUploadError('');
         } catch (err) {
             showToast('error', 'Erreur de sauvegarde.');
+        }
+    };
+
+    const handleImageFile = async (file: File) => {
+        if (!file.type.startsWith('image/')) {
+            setUploadError('Fichier invalide. Choisissez une image (JPG, PNG, WEBP).');
+            return;
+        }
+        setUploadState('uploading');
+        setUploadError('');
+        try {
+            const url = await uploadProductImage(file);
+            setForm((f) => ({ ...f, image_url: url }));
+            setUploadState('done');
+        } catch (err: any) {
+            setUploadState('error');
+            setUploadError(err?.message || 'Erreur lors du téléchargement.');
         }
     };
 
@@ -66,6 +89,8 @@ export default function AdminProducts() {
         setForm(rest);
         setEditingId(id);
         setShowForm(true);
+        setUploadState('idle');
+        setUploadError('');
     };
 
     const handleDelete = async (id: string) => {
@@ -214,15 +239,68 @@ export default function AdminProducts() {
                                 />
                             </div>
 
-                            {/* Image URL */}
-                            <div className="space-y-1.5">
-                                <label className="text-sm font-bold text-foreground">URL de l&apos;image</label>
+                            {/* Image Upload + URL */}
+                            <div className="space-y-2">
+                                <label className="text-sm font-bold text-foreground">Image du produit</label>
+
+                                {/* Drop zone / click to upload */}
+                                <div
+                                    onClick={() => fileInputRef.current?.click()}
+                                    onDragOver={(e) => e.preventDefault()}
+                                    onDrop={(e) => {
+                                        e.preventDefault();
+                                        const file = e.dataTransfer.files[0];
+                                        if (file) handleImageFile(file);
+                                    }}
+                                    className={`relative flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-2xl cursor-pointer transition-all py-4 ${
+                                        uploadState === 'uploading'
+                                            ? 'border-primary bg-sky-50 animate-pulse'
+                                            : uploadState === 'done'
+                                            ? 'border-green-400 bg-green-50'
+                                            : uploadState === 'error'
+                                            ? 'border-red-400 bg-red-50'
+                                            : 'border-border bg-muted hover:border-primary hover:bg-sky-50'
+                                    }`}
+                                >
+                                    {form.image_url ? (
+                                        <img
+                                            src={form.image_url}
+                                            alt="Aperçu"
+                                            className="h-20 w-auto object-contain rounded-xl"
+                                        />
+                                    ) : (
+                                        <Icon name="PhotoIcon" size={32} className="opacity-30" />
+                                    )}
+                                    <p className="text-xs font-bold text-muted-foreground">
+                                        {uploadState === 'uploading'
+                                            ? 'Téléchargement en cours…'
+                                            : uploadState === 'done'
+                                            ? '✓ Image téléchargée'
+                                            : 'Cliquez ou glissez une image ici'}
+                                    </p>
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) handleImageFile(file);
+                                        }}
+                                    />
+                                </div>
+
+                                {uploadError && (
+                                    <p className="text-xs text-red-500 font-bold">{uploadError}</p>
+                                )}
+
+                                {/* Manual URL fallback */}
                                 <input
                                     type="text"
                                     value={form.image_url}
                                     onChange={(e) => setForm({ ...form, image_url: e.target.value })}
                                     className="w-full px-4 py-3 rounded-2xl border border-border bg-muted text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all"
-                                    placeholder="https://... ou chemin local"
+                                    placeholder="Ou collez une URL directement"
                                 />
                             </div>
 

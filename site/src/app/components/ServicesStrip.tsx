@@ -27,7 +27,7 @@ const SERVICES_DATA: ServiceItem[] = [
     id: 'software',
     name: 'Développement Logiciel',
     short: 'Applications web, mobile, desktop',
-    icon: 'WrenchIcon', // maps to Wrench
+    icon: 'WrenchIcon',
     description: 'Conception d\'applications métiers adaptées à vos besoins (gestion de stock, site vitrine, applications mobiles Android/iOS).',
     features: ['Applications Web', 'Applications Mobiles', 'Logiciels Desktop', 'Suivi et maintenance'],
   },
@@ -51,7 +51,7 @@ const SERVICES_DATA: ServiceItem[] = [
     id: 'surveillance',
     name: 'Vidéosurveillance',
     short: 'Caméras IP, NVR, installation physique',
-    icon: 'CalendarDaysIcon', // maps to Camera/Calendar
+    icon: 'CalendarDaysIcon',
     description: 'Installation complète de caméras IP haut de gamme pour vos domiciles et locaux professionnels. Visualisation à distance sur smartphone.',
     features: ['Caméras IP / Analogiques', 'Enregistreurs NVR / DVR', 'Accès distant smartphone', 'Maintenance caméras'],
   },
@@ -88,10 +88,10 @@ export default function ServicesStrip() {
         {/* En-tête */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <span className="text-primary text-xs font-bold uppercase tracking-widest block">Notre expertise</span>
-          <h2 className="font-extrabold text-3xl md:text-4xl text-accent tracking-tight">
+          <h2 className="font-extrabold text-3xl md:text-4xl text-accent tracking-tight text-balance">
             Des Services Tech Complets
           </h2>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-sm text-muted-foreground leading-relaxed text-pretty">
             Chez Ultra Tech Multiservice, nous vous accompagnons dans toutes vos démarches technologiques à Douala, de l&apos;achat d&apos;équipements à la sécurisation de vos locaux.
           </p>
         </div>
@@ -101,18 +101,18 @@ export default function ServicesStrip() {
           {SERVICES_DATA.map((service) => (
             <div
               key={service.id}
-              className="bg-white rounded-3xl border border-border p-8 hover:shadow-xl hover:border-primary/30 transition-all duration-300 flex flex-col group relative overflow-hidden"
+              className="bg-white rounded-3xl border border-border p-8 hover:shadow-xl hover:border-primary/30 hover:-translate-y-1.5 transition-[transform,box-shadow,border-color] duration-300 flex flex-col group relative overflow-hidden"
             >
               {/* Cercle décoratif en arrière-plan */}
               <div className="absolute -top-10 -right-10 w-24 h-24 bg-primary/5 rounded-full group-hover:scale-150 transition-transform duration-500" />
               
               {/* Icône */}
               <div className="w-14 h-14 rounded-2xl bg-sky-light text-primary flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                <Icon name={service.id === 'surveillance' ? 'VideoIcon' : service.id === 'security' ? 'ShieldCheckIcon' : service.icon} size={28} />
+                <Icon name={service.id === 'surveillance' ? 'VideoIcon' : service.id === 'security' ? 'ShieldCheckIcon' : service.icon} size={28} aria-hidden="true" />
               </div>
 
               {/* Titres */}
-              <h3 className="font-extrabold text-xl text-accent group-hover:text-primary transition-colors duration-200">
+              <h3 className="font-extrabold text-xl text-accent group-hover:text-primary transition-colors duration-200 text-pretty">
                 {service.name}
               </h3>
               <p className="text-xs font-bold text-primary mt-1 mb-4 uppercase tracking-wider">
@@ -120,7 +120,7 @@ export default function ServicesStrip() {
               </p>
 
               {/* Description */}
-              <p className="text-sm text-muted-foreground leading-relaxed flex-1">
+              <p className="text-sm text-muted-foreground leading-relaxed flex-1 text-pretty">
                 {service.description}
               </p>
 
@@ -128,7 +128,7 @@ export default function ServicesStrip() {
               <ul className="mt-6 pt-5 border-t border-border space-y-2">
                 {service.features.map((feat, idx) => (
                   <li key={idx} className="flex items-center gap-2 text-xs text-accent font-semibold">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
                     {feat}
                   </li>
                 ))}
@@ -138,7 +138,7 @@ export default function ServicesStrip() {
               <div className="mt-8 grid grid-cols-2 gap-3">
                 <Link
                   href={`/rdv?service=${encodeURIComponent(service.name)}`}
-                  className="py-3 px-4 border border-border text-center rounded-2xl font-bold text-xs text-accent hover:bg-muted transition-colors"
+                  className="py-3 px-4 border border-border text-center rounded-2xl font-bold text-xs text-accent hover:bg-muted transition-[background-color,border-color] duration-200"
                 >
                   Réserver RDV
                 </Link>
@@ -146,7 +146,7 @@ export default function ServicesStrip() {
                   href={getWhatsAppServiceLink(service.name)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-3 px-4 bg-green-500 text-white text-center rounded-2xl font-bold text-xs hover:bg-green-600 transition-colors"
+                  className="py-3 px-4 bg-green-500 text-white text-center rounded-2xl font-bold text-xs hover:bg-green-600 hover:scale-[1.03] active:scale-95 transition-[transform,background-color] duration-200"
                 >
                   WhatsApp
                 </a>
