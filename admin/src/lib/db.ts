@@ -338,8 +338,13 @@ export const uploadProductImage = async (file: File): Promise<string> => {
         .getPublicUrl(data.path);
       return urlData.publicUrl;
     }
-    console.error('Erreur upload image Supabase:', error);
-    throw new Error(error?.message || 'Upload failed');
+    // If bucket doesn't exist or upload fails, fall back gracefully
+    console.warn('Supabase image upload failed (bucket may not exist):', error?.message);
+    throw new Error(
+      error?.message?.includes('Bucket not found')
+        ? 'Le bucket "product-images" n\'existe pas encore dans Supabase Storage. Collez une URL d\'image directement.'
+        : (error?.message || 'Échec du téléchargement')
+    );
   }
   // Fallback: return a temporary object URL (not persisted across sessions)
   return URL.createObjectURL(file);
