@@ -39,7 +39,9 @@ export default function AppIcon({ name, size = 20, className }: AppIconProps) {
     MailIcon: 'Mail',
     MapPinIcon: 'MapPin',
     FacebookIcon: 'Facebook',
-    InstagramIcon: 'Instagram'
+    InstagramIcon: 'Instagram',
+    PhotoIcon: 'Image',
+    UploadIcon: 'Upload'
   };
 
   const lucideName = iconMap[name] || name;

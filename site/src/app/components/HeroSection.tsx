@@ -1,24 +1,23 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import AppImage from '@/components/ui/AppImage';
 
 interface FloatingItemType {
   id: string;
   name: string;
   image_url: string;
-  left: string;      // Position horizontale de départ
-  top: string;       // Position verticale de départ
-  scale: number;     // Échelle de l'image
-  rotate: number;    // Rotation initiale
-  moveX: number;     // Distance de déplacement X sur scroll (px)
-  moveY: number;     // Distance de déplacement Y sur scroll (px)
-  rotateSpeed: number; // Vitesse de rotation sur scroll
+  left: string;
+  top: string;
+  scale: number;
+  rotate: number;
+  moveX: number;
+  moveY: number;
+  rotateSpeed: number;
 }
 
-// Configuration extensible des équipements flottants du Hero
 const FLOATING_ITEMS: FloatingItemType[] = [
   {
     id: 'laptop',
@@ -68,7 +67,6 @@ const FLOATING_ITEMS: FloatingItemType[] = [
     moveY: 120,
     rotateSpeed: -35,
   },
-  // Images supplémentaires
   {
     id: 'headphones',
     name: 'Casque Audio',
@@ -114,9 +112,10 @@ interface FloatingItemProps {
 }
 
 function FloatingItem({ item, index, scrollYProgress }: FloatingItemProps) {
-  const [animationState, setAnimationState] = useState<'entrance' | 'idle'>('entrance');
+  const [landed, setLanded] = useState(false);
+  // Guard: only fire setLanded once (prevents re-fires from idle repeat cycles)
+  const landedRef = useRef(false);
 
-  // Parallax scroll bindings
   const parallaxX = useTransform(scrollYProgress, [0, 1], [0, item.moveX]);
   const parallaxY = useTransform(scrollYProgress, [0, 1], [0, item.moveY]);
   const parallaxRotate = useTransform(
@@ -126,74 +125,82 @@ function FloatingItem({ item, index, scrollYProgress }: FloatingItemProps) {
   );
   const parallaxOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
-  // Starts offscreen above (-450px)
-  const initialY = -450;
-
   return (
-    <motion.div
+    <div
       style={{
         position: 'absolute',
         left: item.left,
         top: item.top,
+        width: '7rem',
+        height: '7rem',
       }}
-      initial={{ y: initialY, opacity: 0, scale: 0.3 }}
-      animate={
-        animationState === 'entrance'
-          ? { y: 0, opacity: 1, scale: item.scale }
-          : { y: [0, -10, 0], rotate: [0, 1.5, -1.5, 0] }
-      }
-      transition={
-        animationState === 'entrance'
-          ? {
-              type: 'spring',
-              stiffness: 85,
-              damping: 10, // Underdamped = bounce on land
-              delay: index * 0.12, // Staggered entry (cascade)
-            }
-          : {
-              y: {
-                duration: 3 + (index % 3) * 0.6,
-                repeat: Infinity,
-                repeatType: 'reverse' as const,
-                ease: 'easeInOut',
-              },
-              rotate: {
-                duration: 4 + (index % 2) * 0.8,
-                repeat: Infinity,
-                repeatType: 'reverse' as const,
-                ease: 'easeInOut',
-              }
-            }
-      }
-      onAnimationComplete={() => {
-        if (animationState === 'entrance') {
-          setAnimationState('idle');
-        }
-      }}
-      className="w-28 h-28 md:w-40 md:h-40 flex items-center justify-center select-none"
+      className="md:w-40 md:h-40"
     >
-      <motion.div
-        style={{
-          x: parallaxX,
-          y: parallaxY,
-          rotate: parallaxRotate,
-          opacity: parallaxOpacity,
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <AppImage
-          src={item.image_url}
-          alt={item.name}
-          width={200}
-          height={200}
-          className="object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.18)] filter saturate-[1.05]"
-        />
-      </motion.div>
-    </motion.div>
+      {/* ── ENTRANCE: falls from above, bounces on land ── */}
+      {!landed && (
+        <motion.div
+          style={{ width: '100%', height: '100%' }}
+          initial={{ y: -450, opacity: 0, scale: 0.3 }}
+          animate={{ y: 0, opacity: 1, scale: item.scale }}
+          transition={{
+            type: 'spring',
+            stiffness: 85,
+            damping: 10,
+            delay: index * 0.12,
+          }}
+          onAnimationComplete={() => {
+            if (!landedRef.current) {
+              landedRef.current = true;
+              setLanded(true);
+            }
+          }}
+          className="flex items-center justify-center select-none"
+        >
+          <AppImage
+            src={item.image_url}
+            alt={item.name}
+            width={200}
+            height={200}
+            className="object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.18)] filter saturate-[1.05]"
+          />
+        </motion.div>
+      )}
+
+      {/* ── IDLE FLOAT: only mounts after entrance is done ── */}
+      {landed && (
+        <motion.div
+          style={{
+            x: parallaxX,
+            y: parallaxY,
+            rotate: parallaxRotate,
+            opacity: parallaxOpacity,
+            width: '100%',
+            height: '100%',
+            scale: item.scale,
+          }}
+          animate={{
+            y: [0, -10, 0],
+          }}
+          transition={{
+            y: {
+              duration: 3 + (index % 3) * 0.6,
+              repeat: Infinity,
+              repeatType: 'reverse',
+              ease: 'easeInOut',
+            },
+          }}
+          className="flex items-center justify-center select-none"
+        >
+          <AppImage
+            src={item.image_url}
+            alt={item.name}
+            width={200}
+            height={200}
+            className="object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.18)] filter saturate-[1.05]"
+          />
+        </motion.div>
+      )}
+    </div>
   );
 }
 
@@ -207,18 +214,18 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28 pb-16">
-      
-      {/* BACKGROUND GRADIENT ANIMÉ (Bug 1 résolu) */}
-      <div 
+
+      {/* BACKGROUND GRADIENT ANIMÉ */}
+      <div
         className="absolute inset-0 z-0 bg-[length:400%_400%] animate-[gradient_15s_ease_infinite]"
         style={{
           backgroundImage: 'linear-gradient(135deg, #CAE8E8, #28469E, #CAE8E8, #28469E)',
         }}
       />
-      
+
       {/* Radial overlay for atmospheric depth */}
       <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.18)_0%,transparent_65%)] pointer-events-none" />
-      
+
       {/* Styles personnalisés pour le dégradé */}
       <style jsx global>{`
         @keyframes gradient {
@@ -230,7 +237,7 @@ export default function HeroSection() {
 
       {/* Contenu textuel central */}
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center space-y-8 select-none">
-        
+
         {/* Surlignage */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}

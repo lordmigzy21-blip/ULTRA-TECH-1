@@ -6,6 +6,11 @@ import { getProducts, getSales, saveSale, Product, Sale } from '@/lib/db';
 
 type Toast = { type: 'success' | 'error'; message: string } | null;
 
+/** Generates a short human-readable invoice number like UT-A3F9K2 */
+function generateInvoiceNumber(id: string): string {
+  return 'UT-' + id.toUpperCase().substring(0, 6);
+}
+
 export default function AdminSales() {
   const [products, setProducts] = useState<Product[]>([]);
   const [sales, setSales] = useState<Sale[]>([]);
@@ -80,7 +85,73 @@ export default function AdminSales() {
   };
 
   const handlePrint = () => {
-    window.print();
+    if (!activeReceipt) return;
+    const invoiceNo = generateInvoiceNumber(activeReceipt.id);
+    const receiptHTML = `
+      <!DOCTYPE html>
+      <html lang="fr">
+      <head>
+        <meta charset="UTF-8" />
+        <title>Reçu ${invoiceNo} — Ultra Tech</title>
+        <style>
+          * { box-sizing: border-box; margin: 0; padding: 0; }
+          body { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: #1a1a2e; background: white; padding: 24px; max-width: 320px; margin: 0 auto; }
+          .header { text-align: center; padding-bottom: 12px; border-bottom: 1px dashed #ccc; margin-bottom: 12px; }
+          .header h1 { font-size: 15px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+          .header p { font-size: 9px; color: #666; margin-top: 3px; }
+          .meta { margin-bottom: 12px; }
+          .meta-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+          .meta-row .label { font-weight: 700; color: #666; }
+          .meta-row .value { font-weight: 900; }
+          .items { border-top: 1px dashed #ccc; border-bottom: 1px dashed #ccc; padding: 10px 0; margin-bottom: 12px; }
+          .item-header { display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 6px; color: #555; font-size: 10px; text-transform: uppercase; }
+          .item-row { display: flex; justify-content: space-between; align-items: flex-start; }
+          .item-name { flex: 1; }
+          .item-sub { font-size: 9px; color: #888; margin-top: 2px; }
+          .item-total { font-weight: 900; }
+          .total-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; text-transform: uppercase; margin-bottom: 16px; }
+          .total-amount { color: #28469E; }
+          .footer { text-align: center; border-top: 1px dashed #ccc; padding-top: 10px; }
+          .footer p { font-size: 9px; color: #888; margin-top: 3px; }
+          .footer strong { font-size: 11px; color: #333; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>Ultra Tech Multiservice</h1>
+          <p>Boutique N30, Galeries du Congo, Akwa, Douala</p>
+          <p>Tél: +237 676 886 733 / 657 941 527</p>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span class="label">N° Facture:</span><span class="value">${invoiceNo}</span></div>
+          <div class="meta-row"><span class="label">Date:</span><span class="value">${new Date(activeReceipt.created_at).toLocaleString('fr-FR')}</span></div>
+        </div>
+        <div class="items">
+          <div class="item-header"><span>Article</span><span>Montant</span></div>
+          <div class="item-row">
+            <div class="item-name">
+              ${activeReceipt.product_name}
+              <div class="item-sub">${activeReceipt.quantity} × ${activeReceipt.price.toLocaleString('fr-CM')} FCFA</div>
+            </div>
+            <div class="item-total">${activeReceipt.total.toLocaleString('fr-CM')} FCFA</div>
+          </div>
+        </div>
+        <div class="total-row"><span>Net à payer</span><span class="total-amount">${activeReceipt.total.toLocaleString('fr-CM')} FCFA</span></div>
+        <div class="footer">
+          <strong>Merci pour votre confiance !</strong>
+          <p>Les marchandises vendues ne sont ni reprises ni échangées.</p>
+        </div>
+      </body>
+      </html>
+    `;
+    const printWindow = window.open('', '_blank', 'width=400,height=600');
+    if (printWindow) {
+      printWindow.document.write(receiptHTML);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    }
   };
 
   if (loading) {
@@ -211,19 +282,19 @@ export default function AdminSales() {
             <h3 className="font-extrabold text-lg text-foreground print:hidden">Aperçu du Reçu</h3>
             
             {activeReceipt ? (
-              <div id="receipt-print-area" className="border border-border rounded-2xl p-6 bg-slate-50 space-y-6 text-accent font-sans print:bg-white print:border-none print:p-0">
-                {/* En-tête Reçu */}
+              <div id="receipt-print-area" className="border border-border rounded-2xl p-6 bg-slate-50 space-y-4 text-accent font-sans">
+                {/* En-tête */}
                 <div className="text-center pb-4 border-b border-dashed border-gray-300">
-                  <h4 className="font-black text-lg tracking-wider uppercase">Ultra Tech Multiservice</h4>
+                  <h4 className="font-black text-base tracking-wider uppercase">Ultra Tech Multiservice</h4>
                   <p className="text-[10px] text-gray-500 mt-1">Boutique N30, Galeries du Congo, Akwa, Douala</p>
                   <p className="text-[10px] text-gray-500">Tél: +237 676 886 733 / 657 941 527</p>
                 </div>
 
-                {/* Détails Facture */}
+                {/* Numéro & date */}
                 <div className="space-y-1.5 text-xs">
                   <p className="flex justify-between">
-                    <span className="font-bold text-gray-500">Reçu ID:</span>
-                    <span className="font-mono font-extrabold uppercase">{activeReceipt.id}</span>
+                    <span className="font-bold text-gray-500">N° Facture:</span>
+                    <span className="font-mono font-extrabold uppercase">{generateInvoiceNumber(activeReceipt.id)}</span>
                   </p>
                   <p className="flex justify-between">
                     <span className="font-bold text-gray-500">Date:</span>
@@ -233,33 +304,34 @@ export default function AdminSales() {
 
                 {/* Article */}
                 <div className="border-t border-b border-dashed border-gray-300 py-3 space-y-2 text-xs">
-                  <div className="flex justify-between font-bold">
+                  <div className="flex justify-between font-bold text-gray-500 uppercase text-[10px]">
                     <span>Article</span>
-                    <span>Total</span>
+                    <span>Montant</span>
                   </div>
                   <div className="flex justify-between text-gray-700">
-                    <span className="max-w-[70%] truncate">
-                      {activeReceipt.product_name} <br />
+                    <span className="flex-1 pr-2">
+                      {activeReceipt.product_name}
+                      <br />
                       <span className="text-[10px] text-gray-400 font-bold">
-                        {activeReceipt.quantity} x {activeReceipt.price.toLocaleString('fr-CM')} FCFA
+                        {activeReceipt.quantity} × {activeReceipt.price.toLocaleString('fr-CM')} FCFA
                       </span>
                     </span>
-                    <span className="font-extrabold">
+                    <span className="font-extrabold whitespace-nowrap">
                       {activeReceipt.total.toLocaleString('fr-CM')} FCFA
                     </span>
                   </div>
                 </div>
 
-                {/* Total Final */}
-                <div className="flex justify-between items-center text-sm font-black pt-2 uppercase">
+                {/* Total */}
+                <div className="flex justify-between items-center text-sm font-black uppercase">
                   <span>Net à payer</span>
                   <span className="text-primary text-base">
                     {activeReceipt.total.toLocaleString('fr-CM')} FCFA
                   </span>
                 </div>
 
-                {/* Pied de page du reçu */}
-                <div className="text-center pt-4 border-t border-dashed border-gray-300 space-y-1">
+                {/* Pied */}
+                <div className="text-center pt-3 border-t border-dashed border-gray-300 space-y-1">
                   <p className="text-[10px] font-bold">Merci pour votre confiance !</p>
                   <p className="text-[9px] text-gray-400">Les marchandises vendues ne sont ni reprises ni échangées.</p>
                 </div>
@@ -344,30 +416,7 @@ export default function AdminSales() {
         )}
       </div>
 
-      {/* Impression CSS cachée */}
-      <style jsx global>{`
-        @media print {
-          body * {
-            visibility: hidden;
-          }
-          #receipt-print-area, #receipt-print-area * {
-            visibility: visible;
-          }
-          #receipt-print-area {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            border: none !important;
-            box-shadow: none !important;
-            padding: 0 !important;
-            background: white !important;
-          }
-          .print\\:hidden {
-            display: none !important;
-          }
-        }
-      `}</style>
+      {/* Print styles are handled inline in the print window — no global CSS needed */}
 
     </div>
   );
