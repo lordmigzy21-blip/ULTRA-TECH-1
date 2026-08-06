@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import AppLogo from './ui/AppLogo';
 import AppImage from './ui/AppImage';
 import Icon from './ui/AppIcon';
@@ -97,7 +98,8 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 mt-20 pt-8 border-t border-dark-blue-2 flex flex-col sm:flex-row items-center justify-between gap-6">
         <div className="flex flex-wrap items-center gap-2 text-xs text-gray-400">
           <span>© {currentYear} Ultra Tech Multiservice. Tous droits réservés.</span>
-          <span className="hidden sm:inline text-gray-600">|</span>
+          <Link href="/conditions-generales" className="hover:text-white transition-colors">Conditions générales</Link>
+          <Link href="/politique-confidentialite" className="hover:text-white transition-colors">Confidentialité</Link>
           <a
             href="https://deerflow.tech"
             target="_blank"

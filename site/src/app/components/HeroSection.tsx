@@ -196,7 +196,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28 pb-16">
+    <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden pt-24 pb-16">
 
       {/* Animated gradient background */}
       <div
@@ -240,7 +240,7 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/25 text-accent font-extrabold text-xs uppercase tracking-widest shadow-sm"
+          className="hidden"
         >
           🇨🇲 Ultra Tech Multiservice — Douala
         </motion.div>

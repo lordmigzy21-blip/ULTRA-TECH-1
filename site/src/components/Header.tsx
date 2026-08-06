@@ -3,21 +3,18 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValueEvent, useScroll } from 'framer-motion';
 import AppLogo from './ui/AppLogo';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const { scrollY } = useScroll();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  useMotionValueEvent(scrollY, 'change', (latest) => setScrolled(latest > 20));
+
+  useEffect(() => setIsOpen(false), [pathname]);
 
   const navLinks = [
     { label: 'Accueil', href: '/' },
@@ -69,7 +66,7 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-[padding,background-color,border-color,box-shadow] duration-300 ${
         scrolled
           ? 'bg-white/85 backdrop-blur-md border-b border-border shadow-sm py-3.5'
           : 'bg-transparent py-5'
@@ -100,7 +97,7 @@ export default function Header() {
           })}
           <Link
             href="/rdv"
-            className="px-5 py-2.5 bg-primary text-white font-bold text-xs uppercase tracking-wider rounded-2xl shadow-md hover:bg-sky-600 transition-all hover:scale-105 active:scale-95"
+            className="px-5 py-2.5 bg-primary text-white font-bold text-xs uppercase tracking-wider rounded-2xl shadow-md hover:bg-sky-600 transition-[transform,background-color] hover:scale-105 active:scale-95"
           >
             Prendre RDV
           </Link>
@@ -109,7 +106,7 @@ export default function Header() {
         {/* Mobile Hamburger Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none z-50 relative"
+          className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 z-50 relative"
           aria-label="Menu"
         >
           <motion.span
