@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { getSettings, parseAboutVideos, AboutVideo } from '@/lib/db';
 import Icon from '@/components/ui/AppIcon';
-import WhyChooseUs from '../components/WhyChooseUs';
+import WhyChooseUs from '../../components/WhyChooseUs';
 
 export default function AboutVideosSection() {
   const [videos, setVideos] = useState<AboutVideo[]>([]);
