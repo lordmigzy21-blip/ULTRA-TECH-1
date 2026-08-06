@@ -45,6 +45,49 @@ export default function AdminSettings() {
     }
   };
 
+  const saveAboutVideos = async (videos: AboutVideo[]) => {
+    const nextSettings = { ...settings, about_videos: JSON.stringify(videos) };
+    await saveSettings(nextSettings);
+    setSettings(nextSettings);
+    setAboutVideos(videos);
+  };
+
+  const handleAboutVideoUpload = async (file?: File) => {
+    if (!file) return;
+    if (!newVideoTitle.trim()) {
+      showToast('error', 'Ajoutez un titre avant de choisir la vidéo.');
+      return;
+    }
+    setVideoUploading(true);
+    try {
+      const url = await uploadAboutVideo(file);
+      const video: AboutVideo = {
+        id: typeof crypto !== 'undefined' ? crypto.randomUUID() : `${Date.now()}`,
+        title: newVideoTitle.trim(),
+        description: newVideoDesc.trim() || undefined,
+        url,
+      };
+      await saveAboutVideos([...aboutVideos, video]);
+      setNewVideoTitle('');
+      setNewVideoDesc('');
+      showToast('success', 'Vidéo ajoutée à la page À propos.');
+    } catch (error) {
+      showToast('error', 'La vidéo n’a pas été envoyée. Vérifiez le bucket Supabase about-videos.');
+    } finally {
+      setVideoUploading(false);
+      if (aboutVideoRef.current) aboutVideoRef.current.value = '';
+    }
+  };
+
+  const removeAboutVideo = async (id: string) => {
+    try {
+      await saveAboutVideos(aboutVideos.filter((video) => video.id !== id));
+      showToast('success', 'Vidéo supprimée.');
+    } catch (error) {
+      showToast('error', 'Impossible de supprimer cette vidéo.');
+    }
+  };
+
   if (loading) {
     return (
       <div className="py-20 text-center text-muted-foreground">
@@ -169,6 +212,22 @@ export default function AdminSettings() {
         </button>
 
       </form>
+
+      <section className="max-w-2xl space-y-5 rounded-3xl border border-border bg-white p-6 shadow-sm md:p-8">
+        <div>
+          <h3 className="text-xl font-extrabold text-foreground">Vidéos de l’atelier</h3>
+          <p className="mt-1 text-sm text-muted-foreground">Ajoutez des vidéos muettes qui seront présentées sur la page À propos.</p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <input value={newVideoTitle} onChange={(event) => setNewVideoTitle(event.target.value)} placeholder="Titre de la vidéo" className="rounded-2xl border border-border bg-muted px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+          <input value={newVideoDesc} onChange={(event) => setNewVideoDesc(event.target.value)} placeholder="Courte description facultative" className="rounded-2xl border border-border bg-muted px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring" />
+        </div>
+        <button type="button" onClick={() => aboutVideoRef.current?.click()} disabled={videoUploading} className="w-full rounded-2xl bg-primary px-5 py-3.5 text-sm font-extrabold text-white transition-[transform,background-color] hover:bg-sky-600 active:scale-[.98] disabled:opacity-60">
+          {videoUploading ? 'Envoi de la vidéo…' : 'Ajouter une vidéo à la page À propos'}
+        </button>
+        <input ref={aboutVideoRef} type="file" accept="video/mp4,video/webm,video/quicktime" className="hidden" onChange={(event) => handleAboutVideoUpload(event.target.files?.[0])} />
+        {aboutVideos.length > 0 && <div className="space-y-3">{aboutVideos.map((video) => <article key={video.id} className="flex items-center gap-3 rounded-2xl border border-border p-3"><video src={video.url} muted className="h-14 w-20 rounded-xl bg-black object-cover" /><div className="min-w-0 flex-1"><p className="truncate text-sm font-extrabold text-accent">{video.title}</p>{video.description && <p className="truncate text-xs text-muted-foreground">{video.description}</p>}</div><button type="button" onClick={() => removeAboutVideo(video.id)} className="rounded-xl p-2 text-red-600 hover:bg-red-50" aria-label={`Supprimer ${video.title}`}><Icon name="TrashIcon" size={17} /></button></article>)}</div>}
+      </section>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppLogo from './ui/AppLogo';
 import Icon from './ui/AppIcon';
 import AdminDashboard from './AdminDashboard';
@@ -17,6 +17,17 @@ type TabType = 'dashboard' | 'products' | 'appointments' | 'sales' | 'settings';
 
 export default function AdminPanelContent({ onLogout }: AdminPanelContentProps) {
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
+
+  useEffect(() => {
+    const savedTab = localStorage.getItem('ut_admin_active_tab') as TabType | null;
+    if (savedTab && ['dashboard', 'products', 'appointments', 'sales', 'settings'].includes(savedTab)) {
+      setActiveTab(savedTab);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('ut_admin_active_tab', activeTab);
+  }, [activeTab]);
 
   const menuItems = [
     { id: 'dashboard', label: 'Tableau de bord', icon: 'HomeIcon' },

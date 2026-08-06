@@ -173,12 +173,15 @@ export default function AdminProducts() {
         const prod = products.find((p) => p.id === id);
         if (!prod) return;
         const newStock = Math.max(0, prod.stock_quantity + delta);
+        const optimisticProduct = { ...prod, stock_quantity: newStock };
+        setProducts((prev) => prev.map((p) => (p.id === id ? optimisticProduct : p)));
         try {
-            const updated = await saveProduct({ ...prod, stock_quantity: newStock });
+            const updated = await saveProduct(optimisticProduct);
             setProducts((prev) =>
                 prev.map((p) => (p.id === id ? updated : p))
             );
         } catch (err) {
+            setProducts((prev) => prev.map((p) => (p.id === id ? prod : p)));
             showToast('error', 'Erreur de mise à jour du stock.');
         }
     };
