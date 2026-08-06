@@ -107,7 +107,7 @@ CREATE TABLE settings (
   value JSONB NOT NULL
 );
 ```
-
+Deployment update
 ---
 
 ## 💻 Conçu par M-TECH
