@@ -23,13 +23,13 @@ export default function FeaturedProducts({ initialProducts }: FeaturedProductsPr
   }
 
   return (
-    <section className="py-24 bg-muted/20">
+    <section className="py-24 bg-muted/20 dark:bg-ultra-dark-blue-800">
       <div className="max-w-7xl mx-auto px-6 space-y-12">
         {/* Titre de section */}
         <div className="flex items-end justify-between gap-6 flex-wrap">
           <div className="space-y-2">
             <span className="text-primary text-xs font-bold uppercase tracking-widest block">Notre catalogue</span>
-            <h2 className="font-extrabold text-3xl md:text-4xl text-accent tracking-tight text-balance">
+            <h2 className="font-extrabold text-3xl md:text-4xl text-accent dark:text-blue-100 tracking-tight text-balance">
               Produits en Vedette
             </h2>
           </div>

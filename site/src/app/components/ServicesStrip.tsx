@@ -63,6 +63,14 @@ const SERVICES_DATA: ServiceItem[] = [
     description: 'Création d\'identités visuelles percutantes pour vos projets : logos professionnels, flyers publicitaires, cartes de visite de haute qualité.',
     features: ['Design de logo', 'Flyers & Affiches', 'Cartes de visite', 'Charte graphique'],
   },
+  {
+    id: 'repair',
+    name: 'Réparation & Maintenance Électronique',
+    short: 'Diagnostic, réparation, entretien',
+    icon: 'WrenchIcon',
+    description: 'Réparation complète d\'appareils électroniques : smartphones, tablettes, ordinateurs, téléviseurs et appareils électroménagers. Diagnostic rapide et devis gratuit.',
+    features: ['Réparation smartphones', 'Réparation ordinateurs', 'Entretien électroménager', 'Diagnostic gratuit'],
+  },
 ];
 
 export default function ServicesStrip() {
@@ -82,16 +90,16 @@ export default function ServicesStrip() {
   };
 
   return (
-    <section id="services" className="py-24 bg-white">
+    <section id="services" className="py-24 bg-white dark:bg-ultra-dark-blue-800">
       <div className="max-w-7xl mx-auto px-6 space-y-16">
         
         {/* En-tête */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <span className="text-primary text-xs font-bold uppercase tracking-widest block">Notre expertise</span>
-          <h2 className="font-extrabold text-3xl md:text-4xl text-accent tracking-tight text-balance">
+          <h2 className="font-extrabold text-3xl md:text-4xl text-accent dark:text-blue-100 tracking-tight text-balance">
             Des Services Tech Complets
           </h2>
-          <p className="text-sm text-muted-foreground leading-relaxed text-pretty">
+          <p className="text-sm text-muted-foreground dark:text-blue-300/70 leading-relaxed text-pretty">
             Chez Ultra Tech Multiservice, nous vous accompagnons dans toutes vos démarches technologiques à Douala, de l&apos;achat d&apos;équipements à la sécurisation de vos locaux.
           </p>
         </div>
@@ -101,7 +109,7 @@ export default function ServicesStrip() {
           {SERVICES_DATA.map((service) => (
             <div
               key={service.id}
-              className="bg-white rounded-3xl border border-border p-8 hover:shadow-xl hover:border-primary/30 hover:-translate-y-1.5 transition-[transform,box-shadow,border-color] duration-300 flex flex-col group relative overflow-hidden"
+              className="bg-white dark:bg-ultra-dark-blue-700 rounded-3xl border border-border dark:border-ultra-dark-blue-600 p-8 hover:shadow-xl hover:border-primary/30 hover:-translate-y-1.5 transition-[transform,box-shadow,border-color] duration-300 flex flex-col group relative overflow-hidden"
             >
               {/* Cercle décoratif en arrière-plan */}
               <div className="absolute -top-10 -right-10 w-24 h-24 bg-primary/5 rounded-full group-hover:scale-150 transition-transform duration-500" />
@@ -112,7 +120,7 @@ export default function ServicesStrip() {
               </div>
 
               {/* Titres */}
-              <h3 className="font-extrabold text-xl text-accent group-hover:text-primary transition-colors duration-200 text-pretty">
+              <h3 className="font-extrabold text-xl text-accent dark:text-blue-100 group-hover:text-primary transition-colors duration-200 text-pretty">
                 {service.name}
               </h3>
               <p className="text-xs font-bold text-primary mt-1 mb-4 uppercase tracking-wider">
@@ -120,14 +128,14 @@ export default function ServicesStrip() {
               </p>
 
               {/* Description */}
-              <p className="text-sm text-muted-foreground leading-relaxed flex-1 text-pretty">
+              <p className="text-sm text-muted-foreground dark:text-blue-300/70 leading-relaxed flex-1 text-pretty">
                 {service.description}
               </p>
 
               {/* Points clés */}
-              <ul className="mt-6 pt-5 border-t border-border space-y-2">
+              <ul className="mt-6 pt-5 border-t border-border dark:border-ultra-dark-blue-600 space-y-2">
                 {service.features.map((feat, idx) => (
-                  <li key={idx} className="flex items-center gap-2 text-xs text-accent font-semibold">
+                  <li key={idx} className="flex items-center gap-2 text-xs text-accent dark:text-blue-200 font-semibold">
                     <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
                     {feat}
                   </li>
@@ -138,7 +146,7 @@ export default function ServicesStrip() {
               <div className="mt-8 grid grid-cols-2 gap-3">
                 <Link
                   href={`/rdv?service=${encodeURIComponent(service.name)}`}
-                  className="py-3 px-4 border border-border text-center rounded-2xl font-bold text-xs text-accent hover:bg-muted transition-[background-color,border-color] duration-200"
+                  className="py-3 px-4 border border-border dark:border-ultra-dark-blue-600 text-center rounded-2xl font-bold text-xs text-accent dark:text-blue-200 hover:bg-muted dark:hover:bg-ultra-dark-blue-600 transition-[background-color,border-color] duration-200"
                 >
                   Réserver RDV
                 </Link>

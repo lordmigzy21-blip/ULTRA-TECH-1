@@ -6,19 +6,19 @@ import BoutiqueContent from './components/BoutiqueContent';
 export const revalidate = 60; // Refresh cache every 60s
 
 export const metadata: Metadata = {
-  title: 'Boutique Ultra Tech — Ordinateurs & Accessoires à Douala',
+  title: 'Catalogue Ultra Tech — Ordinateurs & Accessoires à Douala',
   description: 'Achetez nos ordinateurs portables reconditionnés (HP, Dell, Microsoft Surface) et accessoires informatiques de qualité au meilleur prix à Douala, Cameroun.',
   alternates: {
     canonical: '/boutique',
   },
   openGraph: {
-    title: 'Boutique Ultra Tech — Ordinateurs & Accessoires à Douala',
+    title: 'Catalogue Ultra Tech — Ordinateurs & Accessoires à Douala',
     description: 'Achetez nos ordinateurs portables reconditionnés (HP, Dell, Microsoft Surface) et accessoires informatiques de qualité au meilleur prix à Douala, Cameroun.',
     url: '/boutique',
     type: 'website',
   },
   twitter: {
-    title: 'Boutique Ultra Tech — Ordinateurs & Accessoires à Douala',
+    title: 'Catalogue Ultra Tech — Ordinateurs & Accessoires à Douala',
     description: 'Achetez nos ordinateurs portables reconditionnés (HP, Dell, Microsoft Surface) et accessoires informatiques de qualité au meilleur prix à Douala, Cameroun.',
   }
 };

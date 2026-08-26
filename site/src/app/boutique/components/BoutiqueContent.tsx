@@ -51,17 +51,17 @@ export default function BoutiqueContent({ initialProducts }: BoutiqueContentProp
   }, [search, selectedCategory, products]);
 
   return (
-    <main className="relative min-h-screen bg-white">
+    <main className="relative min-h-screen bg-white dark:bg-ultra-dark-blue-800">
       <Header />
       
-      {/* Hero Boutique */}
-      <section className="bg-muted pt-32 pb-16 border-b border-border">
+      {/* Hero Catalogue */}
+      <section className="bg-muted dark:bg-ultra-dark-blue-700 pt-32 pb-16 border-b border-border dark:border-ultra-dark-blue-600">
         <div className="max-w-7xl mx-auto px-6 space-y-4">
           <span className="text-primary text-xs font-bold uppercase tracking-widest block">Notre catalogue</span>
-          <h1 className="font-extrabold text-3xl md:text-5xl text-accent tracking-tight text-balance">
-            Boutique Ultra Tech
+          <h1 className="font-extrabold text-3xl md:text-5xl text-accent dark:text-blue-100 tracking-tight text-balance">
+            Catalogue Ultra Tech
           </h1>
-          <p className="text-sm text-muted-foreground max-w-xl leading-relaxed text-pretty">
+          <p className="text-sm text-muted-foreground dark:text-blue-300/70 max-w-xl leading-relaxed text-pretty">
             Parcourez nos ordinateurs portables professionnels reconditionnés et nos accessoires informatiques de qualité à Douala.
           </p>
         </div>
@@ -82,7 +82,7 @@ export default function BoutiqueContent({ initialProducts }: BoutiqueContentProp
                 className={`px-5 py-2.5 rounded-2xl text-xs font-bold uppercase tracking-wide transition-[background-color,color,box-shadow] duration-200 ${
                   selectedCategory === cat
                     ? 'bg-primary text-white shadow-sm'
-                    : 'bg-muted border border-border text-accent hover:bg-border'
+                    : 'bg-muted dark:bg-ultra-dark-blue-700 border border-border dark:border-ultra-dark-blue-600 text-accent dark:text-blue-200 hover:bg-border dark:hover:bg-ultra-dark-blue-600'
                 }`}
               >
                 {cat}
@@ -98,7 +98,7 @@ export default function BoutiqueContent({ initialProducts }: BoutiqueContentProp
               placeholder="Rechercher un produit…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-11 pr-10 py-3 rounded-2xl border border-border bg-muted text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+              className="w-full pl-11 pr-10 py-3 rounded-2xl border border-border dark:border-ultra-dark-blue-600 bg-muted dark:bg-ultra-dark-blue-700 text-sm dark:text-blue-100 dark:placeholder:text-blue-400/50 focus:outline-none focus:ring-2 focus:ring-ring transition-all"
             />
             <div className="absolute left-4 top-3.5 text-gray-400">
               <Icon name="SearchIcon" size={16} aria-hidden="true" />
