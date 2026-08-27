@@ -6,13 +6,13 @@ import WhatsAppButton from '@/components/WhatsAppButton';
 import LocationsTeaser from '../components/LocationsTeaser';
 
 export const metadata: Metadata = {
-  title: 'Contact — Boutiques Akwa & Nkouabang',
+  title: 'Contact — Boutique Akwa',
   description:
-    'Contactez Ultra Tech Multiservice à Douala : WhatsApp, téléphone et adresses de nos boutiques à Akwa (Galeries du Congo) et Nkouabang. Horaires et prise de rendez-vous.',
+    'Contactez Ultra Tech Multiservice à Douala : WhatsApp, téléphone et adresse de notre boutique à Akwa (Galeries du Congo). Horaires et prise de rendez-vous.',
   keywords: [
     'contact Ultra Tech Douala',
     'boutique Akwa Galeries du Congo',
-    'Ultra Tech Nkouabang téléphone',
+    'Ultra Tech Akwa téléphone',
     'WhatsApp informatique Douala',
   ],
   alternates: {

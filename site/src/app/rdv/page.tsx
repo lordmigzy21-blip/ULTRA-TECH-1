@@ -3,7 +3,7 @@ import RDVContent from './components/RDVContent';
 
 export const metadata: Metadata = {
   title: 'Prendre Rendez-vous — Ultra Tech Multiservice',
-  description: 'Planifiez un rendez-vous chez Ultra Tech Multiservice à Douala pour un dépannage informatique, maintenance PC, développement logiciel ou tout autre service tech. Boutiques à Akwa et Nkouabang.',
+  description: 'Planifiez un rendez-vous chez Ultra Tech Multiservice à Douala pour un dépannage informatique, maintenance PC, développement logiciel ou tout autre service tech. Boutique à Akwa.',
   alternates: {
     canonical: '/rdv',
   },

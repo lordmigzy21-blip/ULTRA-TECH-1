@@ -109,7 +109,7 @@ export default function ServicesStrip() {
           {SERVICES_DATA.map((service) => (
             <div
               key={service.id}
-              className="bg-white dark:bg-ultra-dark-blue-700 rounded-3xl border border-border dark:border-ultra-dark-blue-600 p-8 hover:shadow-xl hover:border-primary/30 hover:-translate-y-1.5 transition-[transform,box-shadow,border-color] duration-300 flex flex-col group relative overflow-hidden"
+              className="bg-white dark:bg-ultra-dark-blue-700 rounded-ds-md border border-border dark:border-ultra-dark-blue-600 p-8 shadow-ds-card hover:shadow-2xl hover:border-primary/30 hover:-translate-y-1 transition-[transform,box-shadow,border-color] duration-300 flex flex-col group relative overflow-hidden"
             >
               {/* Cercle décoratif en arrière-plan */}
               <div className="absolute -top-10 -right-10 w-24 h-24 bg-primary/5 rounded-full group-hover:scale-150 transition-transform duration-500" />
@@ -146,7 +146,7 @@ export default function ServicesStrip() {
               <div className="mt-8 grid grid-cols-2 gap-3">
                 <Link
                   href={`/rdv?service=${encodeURIComponent(service.name)}`}
-                  className="py-3 px-4 border border-border dark:border-ultra-dark-blue-600 text-center rounded-2xl font-bold text-xs text-accent dark:text-blue-200 hover:bg-muted dark:hover:bg-ultra-dark-blue-600 transition-[background-color,border-color] duration-200"
+                  className="py-3 px-4 border-2 border-btn-primary text-center rounded-full font-bold text-xs text-btn-primary dark:text-blue-200 dark:border-blue-400 hover:bg-btn-primary/10 dark:hover:bg-ultra-dark-blue-600 transition-[background-color,border-color] duration-200"
                 >
                   Réserver RDV
                 </Link>
@@ -154,7 +154,7 @@ export default function ServicesStrip() {
                   href={getWhatsAppServiceLink(service.name)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-3 px-4 bg-green-500 text-white text-center rounded-2xl font-bold text-xs hover:bg-green-600 hover:scale-[1.03] active:scale-95 transition-[transform,background-color] duration-200"
+                  className="py-3 px-4 bg-btn-whatsapp text-white text-center rounded-full font-bold text-xs hover:bg-green-600 hover:scale-[1.03] active:scale-95 transition-[transform,background-color] duration-200"
                 >
                   WhatsApp
                 </a>

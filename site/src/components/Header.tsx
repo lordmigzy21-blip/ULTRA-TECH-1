@@ -111,7 +111,7 @@ export default function Header() {
 
           <Link
             href="/rdv"
-            className="px-5 py-2.5 bg-primary text-white font-bold text-xs uppercase tracking-wider rounded-2xl shadow-md hover:bg-sky-600 transition-[transform,background-color] hover:scale-105 active:scale-95"
+            className="px-5 py-2.5 bg-btn-primary text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-md hover:bg-btn-primary/90 transition-[transform,background-color] hover:scale-105 active:scale-95"
           >
             Prendre RDV
           </Link>
@@ -179,7 +179,7 @@ export default function Header() {
               <Link
                 href="/rdv"
                 onClick={() => setIsOpen(false)}
-                className="w-full text-center block py-3.5 bg-primary text-white font-bold text-sm rounded-2xl shadow-md hover:bg-sky-600"
+                className="w-full text-center block py-3.5 bg-btn-primary text-white font-bold text-sm rounded-full shadow-md hover:bg-btn-primary/90"
               >
                 Prendre Rendez-vous
               </Link>

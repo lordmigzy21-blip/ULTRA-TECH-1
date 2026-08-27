@@ -226,10 +226,10 @@ function BookingForm() {
       <button
         disabled={isSubmitting}
         type="submit"
-        className={`w-full py-4 rounded-2xl font-black text-sm uppercase tracking-wider text-white shadow-lg transition-[transform,background-color] duration-200 flex items-center justify-center gap-2 ${
+        className={`w-full py-4 rounded-full font-black text-sm uppercase tracking-wider text-white shadow-lg transition-[transform,background-color] duration-200 flex items-center justify-center gap-2 ${
           isSubmitting
-            ? 'bg-primary/70 cursor-not-allowed'
-            : 'bg-primary hover:bg-sky-600 hover:scale-[1.02] active:scale-[0.98]'
+            ? 'bg-btn-primary/70 cursor-not-allowed'
+            : 'bg-btn-primary hover:bg-btn-primary/90 hover:scale-[1.02] active:scale-[0.98]'
         }`}
       >
         {isSubmitting ? (

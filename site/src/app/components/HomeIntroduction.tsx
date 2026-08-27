@@ -4,7 +4,7 @@ import Icon from '@/components/ui/AppIcon';
 
 export default function HomeIntroduction() {
   return (
-    <section className="overflow-hidden bg-white dark:bg-ultra-dark-blue-800 py-20 md:py-28">
+    <section className="overflow-hidden bg-white dark:bg-surface-elevated py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-6">
         <div className="grid gap-5 lg:grid-cols-5">
           <article className="relative isolate min-h-[390px] overflow-hidden rounded-[2rem] bg-accent p-8 text-white md:p-10 lg:col-span-3">
