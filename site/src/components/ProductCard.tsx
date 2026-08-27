@@ -28,11 +28,11 @@ export default function ProductCard({ product, onOpenDetails }: ProductCardProps
   const mainImage = getProductMainImage(product.image_url);
 
   return (
-    <div className="bg-white rounded-3xl border border-border overflow-hidden hover:shadow-xl hover:-translate-y-1.5 transition-[transform,box-shadow] duration-300 flex flex-col group h-full">
+    <div className="bg-white dark:bg-ultra-dark-blue-700 rounded-3xl border border-border dark:border-ultra-dark-blue-600 overflow-hidden hover:shadow-xl hover:-translate-y-1.5 transition-[transform,box-shadow] duration-300 flex flex-col group h-full">
       {/* Container d'image clickable */}
       <div 
         onClick={() => onOpenDetails?.(product)}
-        className="relative w-full aspect-square bg-muted/50 p-6 flex items-center justify-center overflow-hidden cursor-pointer"
+        className="relative w-full aspect-square bg-muted/50 dark:bg-ultra-dark-blue-800/60 p-6 flex items-center justify-center overflow-hidden cursor-pointer"
       >
         <AppImage
           src={mainImage}
@@ -61,7 +61,7 @@ export default function ProductCard({ product, onOpenDetails }: ProductCardProps
         </span>
         <h3 
           onClick={() => onOpenDetails?.(product)}
-          className="font-extrabold text-base text-accent line-clamp-2 leading-snug flex-1 group-hover:text-primary transition-colors duration-200 text-pretty cursor-pointer"
+          className="font-extrabold text-base text-accent dark:text-blue-100 line-clamp-2 leading-snug flex-1 group-hover:text-primary transition-colors duration-200 text-pretty cursor-pointer"
         >
           {product.name}
         </h3>
@@ -71,10 +71,10 @@ export default function ProductCard({ product, onOpenDetails }: ProductCardProps
         </p>
 
         {/* Prix et Action */}
-        <div className="mt-5 pt-4 border-t border-border flex items-center justify-between gap-3">
+        <div className="mt-5 pt-4 border-t border-border dark:border-ultra-dark-blue-600 flex items-center justify-between gap-3">
           <div className="flex flex-col">
-            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Prix</span>
-            <span className="font-extrabold text-base text-accent leading-none mt-1 whitespace-nowrap">
+            <span className="text-[9px] font-bold text-gray-400 dark:text-blue-400/60 uppercase tracking-wider">Prix</span>
+            <span className="font-extrabold text-base text-accent dark:text-blue-100 leading-none mt-1 whitespace-nowrap">
               {product.price.toLocaleString('fr-CM')}&nbsp;<span className="text-xs font-bold">FCFA</span>
             </span>
           </div>

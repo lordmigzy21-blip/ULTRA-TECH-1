@@ -12,7 +12,7 @@ export default async function Home() {
   const products = await getProducts();
 
   return (
-    <main className="relative min-h-screen bg-white">
+    <main className="relative min-h-screen bg-white dark:bg-ultra-dark-blue-800">
       <Header />
       <HeroSection />
       <HomeIntroduction />

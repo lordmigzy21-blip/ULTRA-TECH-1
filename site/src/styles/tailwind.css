@@ -6,4 +6,8 @@
   body {
     @apply bg-background text-foreground;
   }
+  .dark body {
+    background-color: #0D2436;
+    color: #e2eaf2;
+  }
 }

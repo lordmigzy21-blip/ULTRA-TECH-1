@@ -12,13 +12,13 @@ export default function AppLogo({ className, showText = true }: AppLogoProps) {
       <AppImage
         src="/assets/images/logo-removebg-preview-1784329896568.png"
         alt="Ultra Tech Logo"
-        width={42}
-        height={42}
+        width={36}
+        height={36}
         className="object-contain"
       />
       {showText && (
         <div className="flex flex-col leading-none">
-          <span className="font-extrabold text-base tracking-tight text-accent">
+          <span className="font-extrabold text-sm tracking-tight text-accent dark:text-white">
             Ultra Tech
           </span>
           <span className="text-[9px] font-bold text-primary tracking-widest uppercase mt-0.5">
