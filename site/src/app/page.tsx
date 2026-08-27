@@ -5,6 +5,7 @@ import { getProducts } from '@/lib/db';
 import FeaturedProducts from './components/FeaturedProducts';
 import HeroSection from './components/HeroSection';
 import HomeIntroduction from './components/HomeIntroduction';
+import UltraTechStoryReveal from './components/UltraTechStoryReveal';
 
 export const revalidate = 60;
 
@@ -16,6 +17,7 @@ export default async function Home() {
       <Header />
       <HeroSection />
       <HomeIntroduction />
+      <UltraTechStoryReveal />
       <FeaturedProducts initialProducts={products} />
       <Footer />
       <WhatsAppButton />
