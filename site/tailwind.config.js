@@ -50,6 +50,29 @@ module.exports = {
             900: '#040C10',
           },
         },
+        // ── Design System Semantic Tokens ──
+        brand: {
+          'ocean-water': '#CAE8E8',
+          'brilliant-blue': '#28469E',
+          'deep-navy': '#0A0E1A',
+        },
+        surface: {
+          base: '#0A0E1A',
+          elevated: '#101526',
+          inverse: '#FFFFFF',
+        },
+        'text-brand': '#5B9BF0',
+        'btn-primary': '#28469E',
+        'btn-whatsapp': '#25D366',
+      },
+      borderRadius: {
+        'ds-sm': '8px',
+        'ds-md': '12px',
+        'ds-lg': '20px',
+        'ds-pill': '9999px',
+      },
+      boxShadow: {
+        'ds-card': '0 8px 24px rgba(0,0,0,0.35)',
       },
       fontFamily: {
         sans: ["var(--font-plus-jakarta-sans)", "ui-sans-serif", "system-ui"],

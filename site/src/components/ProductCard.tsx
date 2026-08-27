@@ -28,7 +28,7 @@ export default function ProductCard({ product, onOpenDetails }: ProductCardProps
   const mainImage = getProductMainImage(product.image_url);
 
   return (
-    <div className="bg-white dark:bg-ultra-dark-blue-700 rounded-3xl border border-border dark:border-ultra-dark-blue-600 overflow-hidden hover:shadow-xl hover:-translate-y-1.5 transition-[transform,box-shadow] duration-300 flex flex-col group h-full">
+    <div className="bg-white dark:bg-ultra-dark-blue-700 rounded-ds-md border border-border dark:border-ultra-dark-blue-600 overflow-hidden shadow-ds-card hover:shadow-2xl hover:-translate-y-1 transition-[transform,box-shadow] duration-300 flex flex-col group h-full">
       {/* Container d'image clickable */}
       <div 
         onClick={() => onOpenDetails?.(product)}
@@ -83,7 +83,7 @@ export default function ProductCard({ product, onOpenDetails }: ProductCardProps
             {onOpenDetails && (
               <button
                 onClick={() => onOpenDetails(product)}
-                className="flex items-center justify-center p-2.5 rounded-2xl bg-muted border border-border text-accent hover:bg-border transition-colors"
+                className="flex items-center justify-center p-2.5 rounded-full bg-muted border border-border text-accent hover:bg-border transition-colors"
                 title="Voir les détails et caractéristiques"
               >
                 <Icon name="SearchIcon" size={14} aria-hidden="true" />
@@ -93,10 +93,10 @@ export default function ProductCard({ product, onOpenDetails }: ProductCardProps
               href={isOutOfStock ? '#' : getWhatsAppLink()}
               target={isOutOfStock ? '_self' : '_blank'}
               rel={isOutOfStock ? '' : 'noopener noreferrer'}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs uppercase tracking-wide transition-[transform,background-color] duration-200 ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-bold text-xs uppercase tracking-wide transition-[transform,background-color] duration-200 whitespace-nowrap ${
                 isOutOfStock
                   ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                  : 'bg-green-500 text-white hover:bg-green-600 hover:scale-105 active:scale-95'
+                  : 'bg-btn-whatsapp text-white hover:bg-green-600 hover:scale-105 active:scale-95'
               }`}
               onClick={(e) => {
                 if (isOutOfStock) e.preventDefault();

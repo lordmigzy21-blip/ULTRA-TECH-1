@@ -23,7 +23,7 @@ export default function FeaturedProducts({ initialProducts }: FeaturedProductsPr
   }
 
   return (
-    <section className="py-24 bg-muted/20 dark:bg-ultra-dark-blue-800">
+    <section className="py-24 bg-muted/20 dark:bg-surface-base">
       <div className="max-w-7xl mx-auto px-6 space-y-12">
         {/* Titre de section */}
         <div className="flex items-end justify-between gap-6 flex-wrap">

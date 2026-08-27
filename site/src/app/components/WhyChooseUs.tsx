@@ -101,7 +101,7 @@ export default function WhyChooseUs() {
                   rel="noopener noreferrer"
                   className="text-xs font-extrabold text-primary hover:underline transition-colors duration-200"
                 >
-                  Discuter avec un conseiller M-TECH
+                  Discuter avec un conseiller Ultra Tech
                 </a>
               </div>
             </div>

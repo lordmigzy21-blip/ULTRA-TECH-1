@@ -21,7 +21,7 @@ export default function AboutVideosSection() {
   return (
     <>
       {/* ─── Static shop showcase video ─── */}
-      <section className="py-20 bg-white dark:bg-ultra-dark-blue-800">
+      <section className="py-20 bg-white dark:bg-surface-elevated">
         <div className="max-w-7xl mx-auto px-6 space-y-10">
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="text-primary text-xs font-bold uppercase tracking-widest block">
@@ -66,7 +66,7 @@ export default function AboutVideosSection() {
       </section>
 
       {/* ─── Admin-managed videos gallery ─── */}
-      <section className="py-24 bg-muted/40 dark:bg-ultra-dark-blue-800">
+      <section className="py-24 bg-muted/40 dark:bg-surface-base">
         <div className="max-w-7xl mx-auto px-6 space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="text-primary text-xs font-bold uppercase tracking-widest block">Derrière les coulisses</span>

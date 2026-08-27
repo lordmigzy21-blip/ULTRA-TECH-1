@@ -8,11 +8,10 @@ import AboutContent from './components/AboutContent';
 export const metadata: Metadata = {
   title: 'À Propos — Notre Boutique & Atelier à Douala',
   description:
-    'Découvrez Ultra Tech Multiservice : boutique informatique à Akwa et Nkouabang, préparation de machines reconditionnées, équipe passionnée et vidéos authentiques de notre atelier à Douala.',
+    'Découvrez Ultra Tech Multiservice : boutique informatique à Akwa, préparation de machines reconditionnées, équipe passionnée et vidéos authentiques de notre atelier à Douala.',
   keywords: [
     'Ultra Tech Douala',
     'boutique informatique Akwa',
-    'Nkouabang ordinateurs',
     'atelier reconditionnement PC Douala',
     'magasin tech Cameroun',
   ],

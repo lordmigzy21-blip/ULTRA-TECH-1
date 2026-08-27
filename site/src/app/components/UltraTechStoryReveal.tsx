@@ -14,7 +14,7 @@ const TRIGGERS: Record<string, { src: string; title: string }> = {
   },
   ordinateur: {
     src: '/assets/images/story_ordinateur.jpg',
-    title: 'Équipements et ordinateurs de qualité',
+    title: 'Équipements & ordinateurs de qualité',
   },
 };
 
@@ -57,71 +57,81 @@ export default function UltraTechStoryReveal() {
     const elRect = triggerEl.getBoundingClientRect();
     const containerRect = container.getBoundingClientRect();
 
-    const calculatedTop = elRect.top - containerRect.top - 180;
+    const calculatedTop = elRect.top - containerRect.top - 190;
     const calculatedLeft = Math.min(
-      Math.max(elRect.left - containerRect.left - 40, 16),
-      containerRect.width - 240
+      Math.max(elRect.left - containerRect.left - 50, 16),
+      containerRect.width - 280
     );
 
     setImgPos({
-      top: calculatedTop > 10 ? calculatedTop : elRect.bottom - containerRect.top + 10,
+      top: calculatedTop > 10 ? calculatedTop : elRect.bottom - containerRect.top + 15,
       left: calculatedLeft,
     });
   }, [hoveredKey]);
 
   return (
-    <section className="py-16 md:py-24 bg-sky-light/40 dark:bg-ultra-dark-blue-800/80 transition-colors">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6">
-        <div
-          ref={containerRef}
-          className="relative min-h-[460px] md:min-h-[500px] overflow-hidden rounded-3xl bg-gradient-to-b from-[#141E3C] via-[#0F172A] to-[#081821] p-8 md:p-14 shadow-2xl border border-sky-500/20"
-        >
-          {/* Ambient Glows */}
-          <div className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-primary/20 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-sky-400/10 blur-3xl" />
+    <section className="relative overflow-hidden bg-accent dark:bg-ultra-dark-blue-900 text-white py-20 md:py-32 transition-colors border-t border-b border-dark-blue-2/50">
+      {/* Subtle Ambient Background Gradients */}
+      <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:radial-gradient(circle_at_15%_20%,rgba(14,165,233,0.25),transparent_40%),radial-gradient(circle_at_85%_80%,rgba(56,189,248,0.15),transparent_45%)]" />
 
-          <div className="relative z-10 mx-auto max-w-3xl text-center">
-            <span className="inline-block rounded-full bg-primary/20 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-sky-300 border border-primary/30 mb-6">
-              Notre Histoire & Vision
+      <div className="relative mx-auto max-w-6xl px-6 md:px-12">
+        <div ref={containerRef} className="relative isolate">
+          {/* Header Label */}
+          <div className="text-center mb-8">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-sky-400/90">
+              VOTRE PARTENAIRE TECH À DOUALA
             </span>
+          </div>
 
-            <h3 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-8 tracking-tight">
-              Une relation humaine derrière chaque composant tech.
-            </h3>
-
-            <p className="text-lg md:text-xl leading-relaxed text-gray-200 font-normal">
+          {/* Story Paragraph with Jägerhof-style dimming and hover reveal */}
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] font-light leading-[1.5] md:leading-[1.4] tracking-tight transition-all duration-300">
               {SEGMENTS.map((seg, i) => {
-                if (!seg.trigger && !seg.emphasis) {
-                  return <span key={i}>{seg.text}</span>;
-                }
+                const triggerKey = seg.trigger;
+                const isThisTriggerHovered = hoveredKey === triggerKey;
+                const isAnyHovered = hoveredKey !== null;
 
-                if (seg.emphasis) {
+                if (!triggerKey && !seg.emphasis) {
                   return (
                     <span
                       key={i}
-                      className="italic font-semibold text-sky-200 border-b border-dashed border-sky-400/40 px-0.5"
+                      className={`transition-opacity duration-300 ${
+                        isAnyHovered ? 'opacity-30 text-gray-300' : 'opacity-100 text-white/95'
+                      }`}
                     >
                       {seg.text}
                     </span>
                   );
                 }
 
-                const triggerKey = seg.trigger!;
-                const isHovered = hoveredKey === triggerKey;
+                if (seg.emphasis) {
+                  return (
+                    <span
+                      key={i}
+                      className={`font-normal transition-opacity duration-300 ${
+                        isAnyHovered ? 'opacity-30 text-gray-300' : 'opacity-100 text-sky-200'
+                      }`}
+                    >
+                      {seg.text}
+                    </span>
+                  );
+                }
 
                 return (
                   <span
                     key={i}
                     ref={(el) => {
-                      triggerRefs.current[triggerKey] = el;
+                      triggerRefs.current[triggerKey!] = el;
                     }}
-                    onMouseEnter={() => setHoveredKey(triggerKey)}
+                    onMouseEnter={() => setHoveredKey(triggerKey!)}
                     onMouseLeave={() => setHoveredKey(null)}
-                    onClick={() => setHoveredKey(hoveredKey === triggerKey ? null : triggerKey)}
-                    className={`italic font-semibold cursor-pointer underline underline-offset-4 decoration-2 transition-all duration-300 px-1 py-0.5 rounded ${
-                      isHovered
-                        ? 'text-sky-300 decoration-sky-300 bg-sky-500/20'
-                        : 'text-white decoration-primary/60 hover:text-sky-200 hover:decoration-primary'
+                    onClick={() => setHoveredKey(hoveredKey === triggerKey ? null : triggerKey!)}
+                    className={`relative inline-block cursor-pointer font-medium transition-all duration-300 px-1.5 py-0.5 rounded ${
+                      isThisTriggerHovered
+                        ? 'opacity-100 text-white underline underline-offset-[10px] decoration-3 decoration-primary bg-primary/20 scale-[1.03] z-10'
+                        : isAnyHovered
+                        ? 'opacity-30 text-gray-300 underline underline-offset-[8px] decoration-1 decoration-white/30'
+                        : 'opacity-100 text-white underline underline-offset-[8px] decoration-1 decoration-sky-400/60 hover:text-sky-200 hover:decoration-primary'
                     }`}
                   >
                     {seg.text}
@@ -129,32 +139,28 @@ export default function UltraTechStoryReveal() {
                 );
               })}
             </p>
-
-            <p className="mt-8 text-xs text-sky-300/70 font-medium italic">
-              💡 Survolez les mots soulignés (<span className="underline decoration-primary">d'Akwa</span>, <span className="underline decoration-primary">ordinateur</span>, <span className="underline decoration-primary">Notre équipe</span>) pour découvrir notre univers en image.
-            </p>
           </div>
 
-          {/* Floating Hover Image Preview */}
+          {/* Floating Hover Image Preview (Jägerhof Style) */}
           {hoveredKey && TRIGGERS[hoveredKey] && (
             <div
               style={{
                 top: `${imgPos.top}px`,
                 left: `${imgPos.left}px`,
               }}
-              className="absolute z-20 pointer-events-none transition-all duration-300 ease-out transform -translate-y-2 animate-fadeIn"
+              className="absolute z-30 pointer-events-none transition-all duration-300 ease-out transform -translate-y-2"
             >
-              <div className="relative w-56 h-40 md:w-64 md:h-44 rounded-2xl overflow-hidden border-2 border-sky-400/60 shadow-[0_20px_50px_rgba(0,0,0,0.7)] bg-slate-900">
+              <div className="relative w-64 h-44 md:w-72 md:h-48 rounded-2xl overflow-hidden border-2 border-white/20 shadow-[0_25px_60px_rgba(0,0,0,0.8)] bg-ultra-dark-blue-900">
                 <Image
                   src={TRIGGERS[hoveredKey].src}
                   alt={TRIGGERS[hoveredKey].title}
                   fill
-                  sizes="(max-width: 768px) 224px, 256px"
-                  className="object-cover transition-transform duration-500 scale-105"
+                  sizes="(max-width: 768px) 256px, 288px"
+                  className="object-cover transition-transform duration-700 hover:scale-110"
                   priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <span className="absolute bottom-2 left-3 right-3 text-[11px] font-semibold text-white truncate text-center">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+                <span className="absolute bottom-3 left-4 right-4 text-xs font-semibold text-white truncate text-center tracking-wide">
                   {TRIGGERS[hoveredKey].title}
                 </span>
               </div>

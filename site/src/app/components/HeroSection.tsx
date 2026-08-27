@@ -252,7 +252,7 @@ export default function HeroSection() {
           className="font-black text-4xl md:text-6xl text-white tracking-tight leading-[1.1] drop-shadow-md text-balance"
         >
           Votre Univers Technologique <br className="hidden md:block" />
-          <span className="text-accent bg-white/10 px-3 py-0.5 rounded-2xl">à Douala</span>
+          <span className="text-white">à Douala</span>
         </motion.h1>
 
         <motion.p
@@ -272,13 +272,13 @@ export default function HeroSection() {
         >
           <Link
             href="/boutique"
-            className="px-8 py-4 bg-white text-accent font-black text-sm uppercase tracking-wider rounded-2xl shadow-lg hover:bg-gray-50 hover:scale-105 active:scale-95 transition-[transform,background-color,box-shadow] duration-200"
+            className="px-8 py-4 bg-transparent border-2 border-white text-white font-black text-sm uppercase tracking-wider rounded-full shadow-lg hover:bg-white/10 hover:scale-105 active:scale-95 transition-[transform,background-color,box-shadow] duration-200"
           >
             Explorer la boutique
           </Link>
           <Link
             href="/rdv"
-            className="px-8 py-4 bg-accent text-white font-black text-sm uppercase tracking-wider rounded-2xl shadow-lg hover:bg-dark-blue-2 hover:scale-105 active:scale-95 transition-[transform,background-color,box-shadow] duration-200 border border-white/10"
+            className="px-8 py-4 bg-btn-primary text-white font-black text-sm uppercase tracking-wider rounded-full shadow-lg hover:bg-btn-primary/90 hover:scale-105 active:scale-95 transition-[transform,background-color,box-shadow] duration-200"
           >
             Prendre rendez-vous
           </Link>

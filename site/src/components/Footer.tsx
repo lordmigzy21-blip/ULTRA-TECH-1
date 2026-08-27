@@ -18,7 +18,7 @@ export default function Footer() {
               <AppLogo showText={false} className="filter brightness-0 invert h-10 w-auto" />
               <div>
                 <h3 className="font-extrabold text-base text-white leading-tight">Ultra Tech Multiservice</h3>
-                <p className="text-xs text-sky-200/80">Douala · Akwa & Nkouabang</p>
+                <p className="text-xs text-sky-200/80">Douala · Akwa</p>
               </div>
             </div>
             <p className="text-sm text-gray-300 leading-relaxed">
@@ -98,7 +98,7 @@ export default function Footer() {
             <div className="space-y-3 text-sm text-gray-300">
               <div className="flex items-start gap-2.5">
                 <Icon name="MapPinIcon" size={18} className="text-primary shrink-0 mt-0.5" aria-hidden="true" />
-                <span>Akwa (Face ancienne mairie) & Nkouabang, Douala</span>
+                <span>Akwa (Face ancienne mairie), Douala</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Icon name="PhoneIcon" size={18} className="text-primary shrink-0" aria-hidden="true" />
@@ -115,7 +115,7 @@ export default function Footer() {
               <div className="pt-2">
                 <Link
                   href="/rdv"
-                  className="inline-flex items-center gap-2 text-xs font-bold bg-primary text-white px-4 py-2.5 rounded-xl hover:bg-primary/90 transition-colors shadow-md"
+                  className="inline-flex items-center gap-2 text-xs font-bold bg-btn-primary text-white px-4 py-2.5 rounded-full hover:bg-btn-primary/90 transition-colors shadow-md"
                 >
                   <Icon name="CalendarIcon" size={14} aria-hidden="true" />
                   Prendre un rendez-vous

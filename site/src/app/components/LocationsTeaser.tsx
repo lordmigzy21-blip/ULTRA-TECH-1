@@ -47,7 +47,7 @@ export default function LocationsTeaser() {
               href="https://wa.me/237676886733?text=Bonjour%20Ultra%20Tech%20Akwa!%20Je%20souhaite%20obtenir%20des%20informations%20ou%20venir%20en%20boutique."
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 w-full text-center py-3.5 bg-accent text-white font-bold text-xs uppercase tracking-wider rounded-2xl hover:bg-dark-blue-2 hover:scale-[1.02] active:scale-98 transition-[transform,background-color] duration-200 block shadow-md"
+              className="mt-6 w-full text-center py-3.5 bg-btn-primary text-white font-bold text-xs uppercase tracking-wider rounded-full hover:bg-btn-primary/90 hover:scale-[1.02] active:scale-98 transition-[transform,background-color] duration-200 block shadow-md"
             >
               Contacter Boutique Akwa
             </a>
@@ -80,7 +80,7 @@ export default function LocationsTeaser() {
               href="https://wa.me/237657941527?text=Bonjour%20Ultra%20Tech%20Nkouabang!%20Je%20souhaite%20obtenir%20des%20informations%20ou%20venir%20en%20boutique."
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 w-full text-center py-3.5 bg-primary text-white font-bold text-xs uppercase tracking-wider rounded-2xl hover:bg-sky-600 hover:scale-[1.02] active:scale-98 transition-[transform,background-color] duration-200 block shadow-md"
+              className="mt-6 w-full text-center py-3.5 bg-btn-whatsapp text-white font-bold text-xs uppercase tracking-wider rounded-full hover:bg-green-600 hover:scale-[1.02] active:scale-98 transition-[transform,background-color] duration-200 block shadow-md"
             >
               Contacter Boutique Nkouabang
             </a>
