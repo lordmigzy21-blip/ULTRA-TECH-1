@@ -36,7 +36,7 @@ export default function ProductDetailsModal({ product, onClose }: ProductDetails
   const isOutOfStock = product.stock_quantity === 0;
 
   const getWhatsAppLink = () => {
-    const text = `Bonjour Ultra Tech! 👋 Je souhaite commander le produit suivant :\n\n• *${product.name}*\n• Catégorie : ${product.category}\n• Prix : ${product.price.toLocaleString('fr-CM')} FCFA\n\nEst-il toujours disponible en magasin ?`;
+    const text = `Bonjour Ultra Tech! 👋 Je souhaite commander le produit suivant :\n\n• *${product.name}*\n• Catégorie : ${product.category}\n• Prix : ${product.price.toLocaleString('fr-CM')} FCFA\n\nEst-il toujours disponible en magasin à Akwa ?`;
     return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
   };
 
@@ -57,7 +57,7 @@ export default function ProductDetailsModal({ product, onClose }: ProductDetails
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/60 backdrop-blur-md"
+          className="fixed inset-0 bg-black/70 backdrop-blur-md"
         />
 
         {/* Modal Card */}
@@ -65,19 +65,19 @@ export default function ProductDetailsModal({ product, onClose }: ProductDetails
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="bg-white rounded-[2rem] md:rounded-[2.5rem] shadow-2xl max-w-4xl w-full overflow-hidden flex flex-col md:flex-row relative border border-border z-10 max-h-[90vh] md:max-h-[85vh]"
+          className="bg-white dark:bg-[#101526] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl max-w-4xl w-full overflow-hidden flex flex-col md:flex-row relative border border-border dark:border-white/15 z-10 max-h-[90vh] md:max-h-[85vh]"
         >
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm border border-border flex items-center justify-center hover:bg-muted hover:scale-105 active:scale-95 transition-all shadow-sm text-accent"
+            className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-white/80 dark:bg-[#0A0E1A]/80 backdrop-blur-sm border border-border dark:border-white/20 flex items-center justify-center hover:bg-muted dark:hover:bg-white/10 hover:scale-105 active:scale-95 transition-all shadow-sm text-accent dark:text-white"
             aria-label="Fermer"
           >
             <Icon name="XMarkIcon" size={18} />
           </button>
 
           {/* Left Side: Images Gallery */}
-          <div className="w-full md:w-1/2 bg-muted/30 p-6 flex flex-col justify-between border-b md:border-b-0 md:border-r border-border min-h-[320px] md:min-h-0">
+          <div className="w-full md:w-1/2 bg-muted/30 dark:bg-[#0A0E1A] p-6 flex flex-col justify-between border-b md:border-b-0 md:border-r border-border dark:border-white/10 min-h-[320px] md:min-h-0">
             <div className="relative flex-1 flex items-center justify-center">
               {/* Active Image Preview */}
               {images.length > 0 ? (
@@ -92,12 +92,12 @@ export default function ProductDetailsModal({ product, onClose }: ProductDetails
                     <img
                       src={images[activeImageIndex]}
                       alt={product.name}
-                      className="object-contain max-w-full max-h-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.1)]"
+                      className="object-contain max-w-full max-h-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.2)]"
                     />
                   </motion.div>
                 </div>
               ) : (
-                <div className="text-muted-foreground flex flex-col items-center gap-2">
+                <div className="text-muted-foreground dark:text-gray-400 flex flex-col items-center gap-2">
                   <Icon name="PhotoIcon" size={48} className="opacity-25" />
                   <span className="text-xs">Aucune image</span>
                 </div>
@@ -108,14 +108,14 @@ export default function ProductDetailsModal({ product, onClose }: ProductDetails
                 <>
                   <button
                     onClick={prevImage}
-                    className="absolute left-0 p-2.5 rounded-full bg-white/90 border border-border hover:bg-white text-accent hover:scale-105 active:scale-95 transition-all shadow-sm"
+                    className="absolute left-0 p-2.5 rounded-full bg-white/90 dark:bg-[#101526]/90 border border-border dark:border-white/20 text-accent dark:text-white hover:scale-105 active:scale-95 transition-all shadow-sm"
                     aria-label="Image précédente"
                   >
                     <Icon name="ChevronRightIcon" size={16} className="rotate-180" />
                   </button>
                   <button
                     onClick={nextImage}
-                    className="absolute right-0 p-2.5 rounded-full bg-white/90 border border-border hover:bg-white text-accent hover:scale-105 active:scale-95 transition-all shadow-sm"
+                    className="absolute right-0 p-2.5 rounded-full bg-white/90 dark:bg-[#101526]/90 border border-border dark:border-white/20 text-accent dark:text-white hover:scale-105 active:scale-95 transition-all shadow-sm"
                     aria-label="Image suivante"
                   >
                     <Icon name="ChevronRightIcon" size={16} />
@@ -131,10 +131,10 @@ export default function ProductDetailsModal({ product, onClose }: ProductDetails
                   <button
                     key={idx}
                     onClick={() => setActiveImageIndex(idx)}
-                    className={`w-12 h-12 rounded-xl bg-white border overflow-hidden flex-shrink-0 flex items-center justify-center transition-all p-1 ${
+                    className={`w-12 h-12 rounded-xl bg-white dark:bg-[#101526] border overflow-hidden flex-shrink-0 flex items-center justify-center transition-all p-1 ${
                       idx === activeImageIndex
                         ? 'border-primary ring-2 ring-primary/20 scale-105'
-                        : 'border-border opacity-70 hover:opacity-100'
+                        : 'border-border dark:border-white/10 opacity-70 hover:opacity-100'
                     }`}
                   >
                     <img src={img} alt="" className="object-contain max-w-full max-h-full" />
@@ -145,25 +145,25 @@ export default function ProductDetailsModal({ product, onClose }: ProductDetails
           </div>
 
           {/* Right Side: Product Details */}
-          <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between overflow-y-auto max-h-[45vh] md:max-h-none">
+          <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between overflow-y-auto max-h-[45vh] md:max-h-none dark:text-white">
             <div className="space-y-4">
               {/* Category & Badges */}
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="text-[10px] font-bold text-primary uppercase tracking-widest">
+                <span className="text-[10px] font-bold text-[#5B9BF0] uppercase tracking-widest">
                   {product.category}
                 </span>
                 <div className="flex gap-1.5">
                   {isOutOfStock ? (
-                    <span className="bg-red-100 text-red-600 text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                    <span className="bg-red-500/20 text-red-400 text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider border border-red-500/30">
                       Rupture
                     </span>
                   ) : (
-                    <span className="bg-green-100 text-green-700 text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">
-                      En Stock
+                    <span className="bg-green-500/20 text-green-400 text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider border border-green-500/30">
+                      En Stock Akwa
                     </span>
                   )}
                   {product.featured && (
-                    <span className="bg-sky-light text-primary text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                    <span className="bg-[#28469E]/30 text-[#5B9BF0] text-[9px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider border border-[#5B9BF0]/30">
                       Vedette
                     </span>
                   )}
@@ -172,25 +172,25 @@ export default function ProductDetailsModal({ product, onClose }: ProductDetails
 
               {/* Title & Price */}
               <div className="space-y-1.5">
-                <h2 className="font-extrabold text-xl md:text-2xl text-accent leading-snug">
+                <h2 className="font-heading font-black text-xl md:text-2xl text-accent dark:text-white leading-snug">
                   {product.name}
                 </h2>
-                <div className="text-2xl font-black text-primary">
-                  {product.price.toLocaleString('fr-CM')} <span className="text-sm font-extrabold">FCFA</span>
+                <div className="font-heading font-black text-2xl text-primary dark:text-[#5B9BF0]">
+                  {product.price.toLocaleString('fr-CM')} <span className="text-sm font-bold text-gray-400">FCFA</span>
                 </div>
               </div>
 
               {/* Characteristics / Description */}
-              <div className="space-y-2 pt-2 border-t border-border">
-                <h3 className="text-xs font-bold text-accent uppercase tracking-wider">Caractéristiques</h3>
-                <div className="text-sm text-gray-600 leading-relaxed max-h-[160px] md:max-h-[220px] overflow-y-auto pr-2 custom-scrollbar whitespace-pre-wrap">
+              <div className="space-y-2 pt-2 border-t border-border dark:border-white/10">
+                <h3 className="text-xs font-bold text-accent dark:text-gray-300 uppercase tracking-wider">Caractéristiques</h3>
+                <div className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed max-h-[160px] md:max-h-[220px] overflow-y-auto pr-2 custom-scrollbar whitespace-pre-wrap">
                   {product.description || "Aucune caractéristique spécifiée."}
                 </div>
               </div>
 
               {videos.length > 0 && (
-                <div className="space-y-2 pt-2 border-t border-border">
-                  <h3 className="text-xs font-bold text-accent uppercase tracking-wider">Vidéos</h3>
+                <div className="space-y-2 pt-2 border-t border-border dark:border-white/10">
+                  <h3 className="text-xs font-bold text-accent dark:text-gray-300 uppercase tracking-wider">Vidéos</h3>
                   <div className="space-y-3">
                     {videos.map((videoUrl, idx) => (
                       <video
@@ -207,10 +207,10 @@ export default function ProductDetailsModal({ product, onClose }: ProductDetails
             </div>
 
             {/* Action Buttons */}
-            <div className="mt-6 pt-4 border-t border-border flex items-center gap-3">
+            <div className="mt-6 pt-4 border-t border-border dark:border-white/10 flex items-center gap-3">
               <button
                 onClick={onClose}
-                className="px-5 py-3.5 border border-border text-center rounded-2xl font-bold text-xs hover:bg-muted text-accent transition-all flex-1"
+                className="px-5 py-3.5 border border-border dark:border-white/20 text-center rounded-full font-bold text-xs hover:bg-muted dark:hover:bg-white/10 text-accent dark:text-white transition-all flex-1"
               >
                 Fermer
               </button>
@@ -218,10 +218,10 @@ export default function ProductDetailsModal({ product, onClose }: ProductDetails
                 href={isOutOfStock ? '#' : getWhatsAppLink()}
                 target={isOutOfStock ? '_self' : '_blank'}
                 rel={isOutOfStock ? '' : 'noopener noreferrer'}
-                className={`flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider transition-all flex-2 text-white shadow-md ${
+                className={`flex items-center justify-center gap-2 px-6 py-3.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all flex-2 text-white shadow-md ${
                   isOutOfStock
                     ? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
-                    : 'bg-green-500 hover:bg-green-600 hover:scale-[1.02] active:scale-[0.98]'
+                    : 'bg-btn-whatsapp hover:bg-green-600 hover:scale-[1.02] active:scale-[0.98]'
                 }`}
                 onClick={(e) => {
                   if (isOutOfStock) e.preventDefault();
