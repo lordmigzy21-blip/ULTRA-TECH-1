@@ -160,14 +160,6 @@ export default function Footer() {
                 className="h-7 w-auto object-contain rounded"
               />
             </a>
-            <a
-              href="https://deerflow.tech"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-gray-400 hover:text-primary transition-colors flex items-center gap-1"
-            >
-              ✦ Deerflow
-            </a>
           </div>
         </div>
       </div>
