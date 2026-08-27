@@ -1,110 +1,133 @@
 import React from 'react';
+import AppImage from '@/components/ui/AppImage';
 import Icon from '@/components/ui/AppIcon';
+import HexPattern from '@/components/ui/HexPattern';
 
 export default function WhyChooseUs() {
-  const benefits = [
+  const proofPoints = [
     {
       title: 'Équipements Authentiques',
-      description: 'Tous nos ordinateurs, téléphones et accessoires proviennent de canaux certifiés avec une garantie locale.',
-      icon: 'ShieldCheckIcon',
+      description: 'Chaque machine est testée, nettoyée et vérifiée dans notre atelier d\'Akwa avant mise en vente.',
+      tag: 'Atelier Akwa',
+      image: '/assets/images/story_ordinateur.jpg',
     },
     {
-      title: 'Expertise Technique',
-      description: 'Nos techniciens certifiés résolvent vos problèmes matériels et logiciels les plus complexes à Douala.',
-      icon: 'WrenchIcon',
-    },
-    {
-      title: 'Service Ultra Rapide',
-      description: 'Prenez rendez-vous en ligne et discutez instantanément sur WhatsApp pour un diagnostic rapide.',
-      icon: 'PhoneIcon',
-    },
-    {
-      title: 'Meilleur Rapport Qualité/Prix',
-      description: 'Nous proposons les tarifs les plus compétitifs du marché de Douala sans aucun compromis sur la qualité.',
-      icon: 'CheckCircleIcon',
+      title: 'Équipe & Expertise Locale',
+      description: 'Nos techniciens vous conseillent directement en boutique ou via WhatsApp sans intermédiaire.',
+      tag: 'Équipe Ultra Tech',
+      image: '/assets/images/story_team.jpg',
     },
   ];
 
   return (
-    <section className="py-24 bg-muted/40 dark:bg-ultra-dark-blue-700 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <section className="py-24 bg-[#0A0E1A] text-white relative overflow-hidden border-t border-b border-white/10">
+      {/* Subtle Hexagon Brand Pattern */}
+      <HexPattern opacity={0.05} />
+
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center relative z-10">
         
-        {/* Colonne Gauche : Contenu */}
-        <div className="space-y-8">
+        {/* Colonne Gauche : Engagements & Tactile Proofs */}
+        <div className="lg:col-span-6 space-y-8">
           <div className="space-y-3">
-            <span className="text-primary text-xs font-bold uppercase tracking-widest block">Pourquoi nous faire confiance</span>
-            <h2 className="font-extrabold text-3xl md:text-4xl text-accent dark:text-blue-100 tracking-tight leading-tight text-balance">
-              L&apos;Excellence Technologique à Douala
+            <span className="text-[#5B9BF0] text-xs font-bold uppercase tracking-widest block">
+              Engagement &amp; Transparence
+            </span>
+            <h2 className="font-heading font-black text-3xl sm:text-4xl text-white tracking-tight leading-tight text-balance">
+              Pourquoi Douala Choisit Ultra Tech
             </h2>
-            <p className="text-sm text-muted-foreground dark:text-blue-300/70 leading-relaxed text-pretty">
-              Ultra Tech Multiservice est le partenaire idéal pour les entreprises et les particuliers recherchant la performance et la fiabilité. Nous ne faisons pas que vendre du matériel, nous construisons des relations durables.
+            <p className="text-sm text-gray-300 leading-relaxed text-pretty">
+              Pas d&apos;intermédiaire impersonnel : nous sommes un vrai magasin à Akwa avec des techniciens passionnés prêts à vous accueillir.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            {benefits.map((benefit, idx) => (
-              <div key={idx} className="space-y-3">
-                <div className="w-12 h-12 rounded-xl bg-sky-light text-primary flex items-center justify-center">
-                  <Icon name={benefit.icon} size={22} aria-hidden="true" />
+          {/* Tactile Real-Photo Cards instead of generic icon-in-circle boxes */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+            {proofPoints.map((point, idx) => (
+              <div
+                key={idx}
+                className="bg-[#101526] rounded-2xl border border-white/10 overflow-hidden shadow-lg group hover:border-[#5B9BF0]/40 transition-colors duration-300"
+              >
+                <div className="photo-brand-grade relative h-36 w-full overflow-hidden">
+                  <AppImage
+                    src={point.image}
+                    alt={point.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <span className="absolute top-3 left-3 bg-[#0A0E1A]/80 backdrop-blur-md text-[#5B9BF0] font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-md border border-white/10 z-10">
+                    {point.tag}
+                  </span>
                 </div>
-                <h3 className="font-extrabold text-base text-accent dark:text-blue-100 text-pretty">
-                  {benefit.title}
-                </h3>
-                <p className="text-xs text-muted-foreground dark:text-blue-300/70 leading-relaxed text-pretty">
-                  {benefit.description}
-                </p>
+                <div className="p-5 space-y-1.5">
+                  <h3 className="font-heading font-bold text-base text-white text-pretty">
+                    {point.title}
+                  </h3>
+                  <p className="text-xs text-gray-300 leading-relaxed text-pretty">
+                    {point.description}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Colonne Droite : Visuel */}
-        <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent rounded-[3rem] transform rotate-3" />
-          <div className="bg-white dark:bg-ultra-dark-blue-800 p-8 md:p-12 rounded-[3rem] border border-border dark:border-ultra-dark-blue-600 shadow-xl space-y-8 relative z-10">
-            <h3 className="font-extrabold text-2xl text-accent dark:text-blue-100 tracking-tight text-balance">
-              Ultra Tech en Chiffres
-            </h3>
+        {/* Colonne Droite : Impact & Stats */}
+        <div className="lg:col-span-6 relative">
+          <div className="bg-[#101526] p-8 sm:p-10 rounded-3xl border border-white/15 shadow-2xl space-y-8 relative">
             
-            <div className="grid grid-cols-2 gap-8">
-              <div className="space-y-1">
-                <p className="text-4xl md:text-5xl font-black text-primary tracking-tight">98&nbsp;%</p>
-                <p className="font-bold text-xs text-accent dark:text-blue-200 uppercase tracking-wider">Clients Satisfaits</p>
-                <p className="text-[10px] text-muted-foreground dark:text-blue-300/70 leading-normal text-pretty">Sur plus de 1000 interventions à Douala.</p>
+            {/* Hexagon motif corner badge */}
+            <div className="flex items-center justify-between border-b border-white/10 pb-6">
+              <div>
+                <h3 className="font-heading font-extrabold text-2xl text-white tracking-tight">
+                  Ultra Tech en Chiffres
+                </h3>
+                <p className="text-xs text-gray-400 mt-1">Impact réel sur le terrain à Douala</p>
               </div>
-              <div className="space-y-1">
-                <p className="text-4xl md:text-5xl font-black text-accent tracking-tight">+5&nbsp;ans</p>
-                <p className="font-bold text-xs text-primary uppercase tracking-wider">D&apos;Expérience</p>
-                <p className="text-[10px] text-muted-foreground leading-normal text-pretty">Dans le service informatique et logiciel.</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-4xl md:text-5xl font-black text-accent tracking-tight">0&nbsp;%</p>
-                <p className="font-bold text-xs text-primary uppercase tracking-wider">Frais Cachés</p>
-                <p className="text-[10px] text-muted-foreground leading-normal text-pretty">Tous nos devis sont clairs et validés avant travaux.</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-4xl md:text-5xl font-black text-primary tracking-tight">100&nbsp;%</p>
-                <p className="font-bold text-xs text-accent uppercase tracking-wider">Garantie Qualité</p>
-                <p className="text-[10px] text-muted-foreground leading-normal text-pretty">Remplacement ou ajustement immédiat.</p>
+              <div className="w-12 h-12 rounded-2xl bg-[#28469E]/30 border border-[#5B9BF0]/30 flex items-center justify-center text-[#5B9BF0]">
+                <Icon name="ShieldCheckIcon" size={24} aria-hidden="true" />
               </div>
             </div>
 
-            <div className="bg-sky-light rounded-3xl p-5 border border-primary/15 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center flex-shrink-0">
-                <Icon name="PhoneIcon" size={18} aria-hidden="true" />
+            <div className="grid grid-cols-2 gap-8">
+              <div className="space-y-1 border-l-2 border-[#5B9BF0] pl-4">
+                <p className="font-heading font-black text-4xl sm:text-5xl text-white tracking-tight">98%</p>
+                <p className="font-bold text-xs text-[#5B9BF0] uppercase tracking-wider">Clients Satisfaits</p>
+                <p className="text-[11px] text-gray-400 leading-normal">Sur +1000 interventions à Douala.</p>
               </div>
-              <div>
-                <p className="text-xs font-bold text-accent dark:text-blue-100">Besoin d&apos;un conseil personnalisé ?</p>
-                <a
-                  href="https://wa.me/237676886733"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs font-extrabold text-primary hover:underline transition-colors duration-200"
-                >
-                  Discuter avec un conseiller Ultra Tech
-                </a>
+              <div className="space-y-1 border-l-2 border-[#28469E] pl-4">
+                <p className="font-heading font-black text-4xl sm:text-5xl text-white tracking-tight">+5 ans</p>
+                <p className="font-bold text-xs text-[#5B9BF0] uppercase tracking-wider">D&apos;Expérience</p>
+                <p className="text-[11px] text-gray-400 leading-normal">Dans le service informatique &amp; logiciel.</p>
+              </div>
+              <div className="space-y-1 border-l-2 border-[#28469E] pl-4">
+                <p className="font-heading font-black text-4xl sm:text-5xl text-white tracking-tight">0%</p>
+                <p className="font-bold text-xs text-[#5B9BF0] uppercase tracking-wider">Frais Cachés</p>
+                <p className="text-[11px] text-gray-400 leading-normal">Devis clairs et validés avant travaux.</p>
+              </div>
+              <div className="space-y-1 border-l-2 border-[#5B9BF0] pl-4">
+                <p className="font-heading font-black text-4xl sm:text-5xl text-white tracking-tight">100%</p>
+                <p className="font-bold text-xs text-[#5B9BF0] uppercase tracking-wider">Garantie Qualité</p>
+                <p className="text-[11px] text-gray-400 leading-normal">Accompagnement après-vente garanti.</p>
               </div>
             </div>
+
+            {/* Direct Contact Banner */}
+            <div className="bg-[#0A0E1A] rounded-2xl p-5 border border-white/10 flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold text-white">Besoin d&apos;un conseil personnalisé ?</p>
+                <p className="text-[11px] text-gray-400">Passez en boutique ou échangez sur WhatsApp.</p>
+              </div>
+              <a
+                href="https://wa.me/237676886733"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 px-4 py-2.5 bg-[#25D366] hover:bg-green-600 text-white font-bold text-xs rounded-full transition-colors flex items-center gap-1.5"
+              >
+                <Icon name="PhoneIcon" size={14} className="fill-current" aria-hidden="true" />
+                WhatsApp
+              </a>
+            </div>
+
           </div>
         </div>
 

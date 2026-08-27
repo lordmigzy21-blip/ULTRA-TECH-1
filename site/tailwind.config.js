@@ -76,6 +76,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ["var(--font-plus-jakarta-sans)", "ui-sans-serif", "system-ui"],
+        heading: ["var(--font-space-grotesk)", "sans-serif"],
       },
       spacing: {
         'space-3xs': '0.5rem',
