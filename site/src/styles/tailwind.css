@@ -11,14 +11,24 @@
     color: #e2eaf2;
   }
 
-  /* ── Design System: Global focus-visible for accessibility (WCAG 2.2 AA) ── */
-  a:focus-visible,
-  button:focus-visible,
-  input:focus-visible,
-  select:focus-visible,
-  textarea:focus-visible,
-  [role="button"]:focus-visible {
-    outline: 2px solid #5B9BF0;
-    outline-offset: 2px;
+  /* ── Visual Personality: Architectural Headings ── */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-space-grotesk), sans-serif;
+  }
+}
+
+@layer utilities {
+  /* ── Brand Photo Duotone & Grade Overlay ── */
+  .photo-brand-grade {
+    position: relative;
+  }
+  .photo-brand-grade::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10, 14, 26, 0.2) 0%, rgba(40, 70, 158, 0.45) 100%);
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    border-radius: inherit;
   }
 }

@@ -61,7 +61,7 @@ export default function ProductCard({ product, onOpenDetails }: ProductCardProps
         </span>
         <h3 
           onClick={() => onOpenDetails?.(product)}
-          className="font-extrabold text-base text-accent dark:text-blue-100 line-clamp-2 leading-snug flex-1 group-hover:text-primary transition-colors duration-200 text-pretty cursor-pointer"
+          className="font-heading font-extrabold text-base text-accent dark:text-blue-100 line-clamp-2 leading-snug flex-1 group-hover:text-primary transition-colors duration-200 text-pretty cursor-pointer"
         >
           {product.name}
         </h3>

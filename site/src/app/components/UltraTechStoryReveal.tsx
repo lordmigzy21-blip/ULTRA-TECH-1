@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useLayoutEffect } from 'react';
 import Image from 'next/image';
+import HexPattern from '@/components/ui/HexPattern';
 
 const TRIGGERS: Record<string, { src: string; title: string }> = {
   akwa: {
@@ -70,22 +71,22 @@ export default function UltraTechStoryReveal() {
   }, [hoveredKey]);
 
   return (
-    <section className="relative overflow-hidden bg-accent dark:bg-ultra-dark-blue-900 text-white py-20 md:py-32 transition-colors border-t border-b border-dark-blue-2/50">
-      {/* Subtle Ambient Background Gradients */}
-      <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:radial-gradient(circle_at_15%_20%,rgba(14,165,233,0.25),transparent_40%),radial-gradient(circle_at_85%_80%,rgba(56,189,248,0.15),transparent_45%)]" />
+    <section className="relative overflow-hidden bg-[#0A0E1A] text-white py-20 md:py-32 transition-colors border-t border-b border-white/10">
+      {/* ── Hexagon brand texture ── */}
+      <HexPattern opacity={0.04} />
 
-      <div className="relative mx-auto max-w-6xl px-6 md:px-12">
+      <div className="relative mx-auto max-w-6xl px-6 md:px-12 z-10">
         <div ref={containerRef} className="relative isolate">
           {/* Header Label */}
           <div className="text-center mb-8">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-sky-400/90">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#5B9BF0]">
               VOTRE PARTENAIRE TECH À DOUALA
             </span>
           </div>
 
-          {/* Story Paragraph with Jägerhof-style dimming and hover reveal */}
+          {/* Story Paragraph with Jägerhof-style dimming and serif font tone shift */}
           <div className="mx-auto max-w-4xl text-center">
-            <p className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] font-light leading-[1.5] md:leading-[1.4] tracking-tight transition-all duration-300">
+            <p className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] font-light leading-[1.5] md:leading-[1.4] tracking-tight transition-all duration-300">
               {SEGMENTS.map((seg, i) => {
                 const triggerKey = seg.trigger;
                 const isThisTriggerHovered = hoveredKey === triggerKey;

@@ -18,7 +18,7 @@ export default function AppLogo({ className, showText = true }: AppLogoProps) {
       />
       {showText && (
         <div className="flex flex-col leading-none">
-          <span className="font-extrabold text-sm tracking-tight text-accent dark:text-white">
+          <span className="font-heading font-black text-sm tracking-tight text-accent dark:text-white">
             Ultra Tech
           </span>
           <span className="text-[9px] font-bold text-primary tracking-widest uppercase mt-0.5">
